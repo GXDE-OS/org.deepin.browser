@@ -1,0 +1,21 @@
+#!/bin/sh
+# modify by xiaohuyang, Modify app icon.   2020/12/18 --start
+:<<!
+echo "icons ..."
+for file in $(find chrome/app/theme -name product_logo_[0-9]*.png -a ! -name *mono* | grep -v 200); do
+     size=$(basename $file | cut -d_ -f3 | sed s/\.png//)
+     dest=debian/org.deepin.browser/usr/share/icons/hicolor/$size\x$size/apps
+     mkdir -p $dest
+     cp $file $dest/org.deepin.browser.png
+     echo copied: $file to $dest/org.deepin.browser.png
+     done
+!
+echo "icons ..."
+for file in $(find chrome/app/theme -name product_logo_[0-9]*.svg -a ! -name *mono* | grep -v 200); do
+     size=$(basename $file | cut -d_ -f3 | sed s/\.svg//)
+     dest=debian/org.deepin.browser/usr/share/icons/hicolor/$size\x$size/apps
+     mkdir -p $dest
+     cp $file $dest/org.deepin.browser.svg
+     echo copied: $file to $dest/org.deepin.browser.svg
+     done
+# modify by xiaohuyang, Modify app icon.   2020/12/18 --start

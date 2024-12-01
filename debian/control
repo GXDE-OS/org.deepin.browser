@@ -1,0 +1,122 @@
+Source: org.deepin.browser
+Section: web
+Priority: optional
+Maintainer: Deepin Browser <browser@deepin.com>
+Homepage: https://www.deepin.com/
+Standards-Version: 4.3.0
+Rules-Requires-Root: no
+Build-Depends:
+ debhelper (>= 11),
+ devscripts (>= 2.18.9),
+ lld,
+ clang,
+ clang-format,
+ python3,
+ pkg-config,
+ ninja-build,
+ python-jinja2,
+ python-pkg-resources,
+ ca-certificates,
+ wget,
+ flex,
+ yasm,
+ xvfb,
+ wdiff,
+ gperf,
+ bison,
+ nodejs,
+ valgrind,
+ xz-utils,
+ x11-apps,
+ xfonts-base,
+ libglewmx-dev,
+ libgl1-mesa-dev,
+ libglu1-mesa-dev,
+ libegl1-mesa-dev,
+ libgles2-mesa-dev,
+ mesa-common-dev,
+ libva-dev,
+ libxt-dev,
+ libre2-dev,
+ libgbm-dev,
+ libpng-dev,
+ libxss-dev,
+ libelf-dev,
+ libvpx-dev (>= 1.7.0),
+ libpci-dev,
+ libcap-dev,
+ libdrm-dev,
+ libicu-dev,
+ libffi-dev,
+ libkrb5-dev,
+ libexif-dev,
+ libflac-dev,
+ libudev-dev,
+ libopus-dev, 
+ libxtst-dev,
+ libjpeg-dev,
+ libxml2-dev,
+ libgtk-3-dev,
+ libgtk2.0-dev,
+ libxslt1-dev,
+ liblcms2-dev,
+ libpulse-dev,
+ libpam0g-dev,
+ libsnappy-dev,
+ libavutil-dev,
+ libavcodec-dev (>= 7:3.0),
+ libavformat-dev,
+ libglib2.0-dev,
+ libasound2-dev,
+ libjsoncpp-dev,
+ libspeechd-dev (>= 0.8.4),
+ libminizip-dev,
+ libhunspell-dev,
+ libharfbuzz-dev (>= 2.1.1),
+ libusb-1.0-0-dev,
+ libopenjp2-7-dev,
+ libmodpbase64-dev,
+ libnss3-dev (>= 3.12.3),
+ libnspr4-dev (>= 2:4.9),
+ libcups2-dev (>= 1.5.0),
+ libevent-dev (>= 1.4.13),
+ libjs-jquery,
+ libjs-jquery-flot,
+ libgcrypt20-dev,
+ fonts-ipafont-gothic,
+ fonts-ipafont-mincho,
+ libdbus-1-dev,
+ libx11-xcb-dev,
+ libxcb-dri3-dev
+
+Package: org.deepin.browser
+Architecture: any
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
+ x11-utils,
+ xdg-utils,
+Recommends:
+ upower,
+ libu2f-udev,
+ libgl1-mesa-dri,
+ fonts-liberation,
+ notification-daemon,
+Provides:
+ www-browser,
+ gnome-www-browser,
+Breaks:
+ chromium-lwn4chrome (<= 1.0-2),
+ chromium-tt-rss-notifier (<= 0.5.2-2),
+Conflicts:
+ libnettle4,
+ libsecret-1-0 (<< 0.18),
+ libgl1-mesa-swx11,
+Description: org.deepin.browser
+ A fast web browser with simple interface.
+
+Package: org.deepin.browserdriver
+Architecture: any
+Depends: org.deepin.browser,
+Description: org.deepin.browserdriver
+ A standalone server that implements the W3C WebDriver standard.

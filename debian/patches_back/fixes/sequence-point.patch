@@ -1,0 +1,75 @@
+description: fix undefined order in which expressions are evaluated (-Wsequence-point)
+author: Michael Gilbert <mgilbert@debian.org>
+
+--- a/components/download/internal/common/download_item_impl.cc
++++ b/components/download/internal/common/download_item_impl.cc
+@@ -638,7 +638,9 @@ void DownloadItemImpl::UpdateResumptionI
+     bytes_wasted_ = 0;
+   }
+ 
+-  auto_resume_count_ = user_resume ? 0 : ++auto_resume_count_;
++  ++auto_resume_count_;
++  if (user_resume)
++    auto_resume_count_ = 0;
+ }
+ 
+ void DownloadItemImpl::Cancel(bool user_cancel) {
+--- a/third_party/blink/renderer/platform/fonts/opentype/open_type_caps_support.cc
++++ b/third_party/blink/renderer/platform/fonts/opentype/open_type_caps_support.cc
+@@ -153,8 +153,8 @@ OpenTypeCapsSupport::FontFormat OpenType
+                             hb_blob_get_length(mort_blob.get());
+     bool has_gsub = hb_ot_layout_has_substitution(hb_face);
+     font_format_ = has_morx_or_mort&& !has_gsub
+-                       ? font_format_ = FontFormat::kAat
+-                       : font_format_ = FontFormat::kOpenType;
++                       ? FontFormat::kAat
++                       : FontFormat::kOpenType;
+   }
+   return font_format_;
+ }
+--- a/third_party/blink/renderer/modules/animationworklet/animation_worklet_proxy_client.cc
++++ b/third_party/blink/renderer/modules/animationworklet/animation_worklet_proxy_client.cc
+@@ -186,7 +186,7 @@ AnimationWorkletProxyClient::SelectGloba
+   if (--next_global_scope_switch_countdown_ < 0) {
+     int last_global_scope_index = current_global_scope_index_;
+     current_global_scope_index_ =
+-        (++current_global_scope_index_ % global_scopes_.size());
++        (current_global_scope_index_ + 1) % global_scopes_.size();
+     global_scopes_[last_global_scope_index]->MigrateAnimatorsTo(
+         global_scopes_[current_global_scope_index_]);
+     // Introduce an element of randomness in the switching interval to make
+--- a/chrome/browser/notifications/scheduler/internal/impression_history_tracker.cc
++++ b/chrome/browser/notifications/scheduler/internal/impression_history_tracker.cc
+@@ -392,7 +392,7 @@ void ImpressionHistoryTrackerImpl::Apply
+ 
+   // Increase |current_max_daily_show| by 1.
+   client_state->current_max_daily_show =
+-      base::ClampToRange(++client_state->current_max_daily_show, 0,
++      base::ClampToRange(client_state->current_max_daily_show + 1, 0,
+                          config_.max_daily_shown_per_type);
+ }
+ 
+--- a/third_party/webrtc/modules/audio_coding/neteq/decision_logic.cc
++++ b/third_party/webrtc/modules/audio_coding/neteq/decision_logic.cc
+@@ -352,7 +352,7 @@ NetEq::Operation DecisionLogic::FuturePa
+       prev_mode == NetEq::Mode::kCodecInternalCng) {
+     size_t cur_size_samples =
+         estimate_dtx_delay_
+-            ? cur_size_samples = span_samples_in_packet_buffer
++            ? span_samples_in_packet_buffer
+             : num_packets_in_packet_buffer * decoder_frame_length;
+     // Target level is in number of packets in Q8.
+     const size_t target_level_samples =
+--- a/third_party/blink/renderer/platform/geometry/calculation_value.cc
++++ b/third_party/blink/renderer/platform/geometry/calculation_value.cc
+@@ -45,8 +45,8 @@ CalculationValue::~CalculationValue() {
+ }
+ 
+ float CalculationValue::Evaluate(float max_value) const {
+-  float value = is_expression_ ? value = data_.expression->Evaluate(max_value)
+-                               : value = Pixels() + Percent() / 100 * max_value;
++  float value = is_expression_ ? data_.expression->Evaluate(max_value)
++                               : Pixels() + Percent() / 100 * max_value;
+   return (IsNonNegative() && value < 0) ? 0 : value;
+ }
+ 

@@ -1,0 +1,16 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = "remove" ] || [ "$1" = "deconfigure" ] ; then
+    update-alternatives --remove x-www-browser /usr/bin/browser
+    update-alternatives --remove gnome-www-browser /usr/bin/browser
+    if [ -d /etc/browser.d ]; then
+        rm -r /etc/browser.d
+    fi
+    if [ -d /etc/browser ]; then
+        rm -r /etc/browser
+    fi
+fi
+
+#DEBHELPER#

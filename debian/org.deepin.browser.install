@@ -1,0 +1,63 @@
+out/Release/browser usr/share/browser
+
+out/Release/chrome_*.pak usr/share/browser
+out/Release/resources.pak usr/share/browser
+
+out/Release/resources/en-US.pak usr/share/browser/locales
+
+debian/presubj usr/share/bug/browser
+
+debian/initial_bookmarks.html usr/share/browser
+
+debian/browser.xml usr/share/gnome-control-center/default-apps
+
+debian/org.deepin.browser.desktop usr/share/applications
+
+debian/etc/README usr/share/browser.d
+debian/etc/apikeys usr/share/browser.d
+debian/etc/extensions usr/share/browser.d
+debian/etc/default-flags usr/share/browser.d
+debian/etc/master_preferences usr/share/browser
+
+#copy password auth bin/policy
+#debian/source/password_auth/out/deepin-password-auth usr/bin
+debian/source/password_auth/com.deepin.pkexec.passwordAuth.policy usr/share/polkit-1/actions
+
+#security browsering, modify by xiaohuyang, 2021/3/18
+uosdata/include-binaries/risky_urls.db usr/share/browser
+
+#driver
+#out/Release/chromedriver usr/bin
+
+#l10n
+out/Release/locales usr/share/browser
+out/Release/icudtl.dat usr/share/browser
+
+#common
+out/Release/*.bin usr/share/browser
+
+#sandbox
+out/Release/browser-sandbox usr/share/browser
+
+#assets/deepin-browser
+assets/browser usr/share/deepin-manual/manual-assets/application/org.deepin.browser/
+
+#for npapi
+out/Release/libEGL.so usr/share/browser
+out/Release/libGLESv2.so usr/share/browser
+
+#uos_nssdb
+#uos_nssdb/cert9.db      etc/browser/.pki/uos_nssdb/
+#uos_nssdb/key4.db       etc/browser/.pki/uos_nssdb/
+#uos_nssdb/pkcs11.txt    etc/browser/.pki/uos_nssdb/
+
+#for crash handler
+#out/Release/minidump_stackwalk usr/share/browser
+#out/Release/crashpad_handler usr/share/browser
+#out/Release/sym usr/share/browser
+
+#swiftshader
+out/Release/swiftshader usr/share/browser
+
+#default extensions
+#uosdata/uos-default-extensions usr/share/browser

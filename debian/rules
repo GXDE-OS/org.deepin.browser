@@ -1,0 +1,196 @@
+#!/usr/bin/make -f
+
+# enable verbose build messages
+export DH_VERBOSE=1
+
+# enable all build hardening flags
+export DEB_BUILD_MAINT_OPTIONS=hardening=+all
+
+# indicate that binary targets do not require root
+export DEB_RULES_REQUIRES_ROOT=no
+
+# compile with clang (gcc is currently not supported)
+export AR=ar
+export NM=nm
+
+ifeq (mips64el,$(DEB_HOST_ARCH))
+export CC=clang --target=mips64el-linux-gnu
+export CXX=clang++ --target=mips64el-linux-gnu
+else
+export CC=clang
+export CXX=clang++
+endif
+
+# more verbose linker output
+export LDFLAGS+=-Wl,--stats
+
+# initial flags from dpkg-buildflags
+export DEB_CXXFLAGS_MAINT_STRIP=-g
+export CXXFLAGS=$(shell dpkg-buildflags --get CXXFLAGS)
+
+# extra flags to reduce warnings that aren't very useful
+export CXXFLAGS+=-Wno-conversion \
+                 -Wno-unused-function \
+                 -Wno-unused-variable \
+                 -Wno-unused-private-field \
+                 -Wno-deprecated-declarations \
+                 -Wno-unknown-pragmas \
+
+# disable clang plugins
+defines=clang_use_chrome_plugins=false
+
+# build using system toolchain
+defines+=host_toolchain=\"//build/toolchain/linux/unbundle:default\"
+defines+=custom_toolchain=\"//build/toolchain/linux/unbundle:default\"
+
+# set the appropriate cpu architecture
+DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
+ifeq (i386,$(DEB_HOST_ARCH))
+defines+=host_cpu=\"x86\" symbol_level=0
+endif
+ifeq (amd64,$(DEB_HOST_ARCH))
+defines+=host_cpu=\"x64\"
+endif
+ifeq (arm64,$(DEB_HOST_ARCH))
+defines+=host_cpu=\"arm64\"
+endif
+ifeq (armhf,$(DEB_HOST_ARCH))
+defines+=host_cpu=\"arm\" arm_use_neon=false symbol_level=0
+endif
+ifeq (mips64el,$(DEB_HOST_ARCH))
+defines+=host_cpu=\"mips64el\" mips_arch_variant=\"loongson3\"
+endif
+
+
+# disabled features
+defines+=is_debug=false \
+         use_goma=false \
+         use_ozone=false \
+         use_sysroot=false \
+         use_openh264=false \
+         use_allocator=\"none\" \
+         use_libjpeg_turbo=true \
+         use_custom_libcxx=false \
+         use_gnome_keyring=false \
+         use_unofficial_version_number=false \
+         enable_vr=false \
+         enable_nacl=false \
+         enable_nacl_nonsfi=false \
+         enable_swiftshader=true \
+         enable_reading_list=false \
+         enable_one_click_signin=false \
+         enable_iterator_debugging=false \
+         enable_hangout_services_extension=false \
+         optimize_webui=true \
+         closure_compile=false \
+         blink_symbol_level=0 \
+         treat_warnings_as_errors=false \
+
+# enabled features
+defines+=use_gio=true \
+         use_pulseaudio=true \
+         link_pulseaudio=true \
+         enable_widevine=false \
+         v8_enable_backtrace=true \
+         use_system_zlib=false \
+         use_system_lcms2=false \
+         use_system_libjpeg=false \
+         use_system_freetype=true \
+         use_system_harfbuzz=true \
+         use_system_libopenjpeg2=true \
+         concurrent_links=1 \
+         proprietary_codecs=true \
+         ffmpeg_branding=\"Chrome\" \
+         fieldtrial_testing_like_official_build=true \
+
+# handle parallel build options
+njobs=1
+ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+njobs=$(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+endif
+
+%:
+	dh $@
+
+out/Release/gn:
+	./tools/gn/bootstrap/bootstrap.py --skip-generate-buildfiles -j$(njobs)
+
+override_dh_auto_configure:
+	# output compiler information
+	$(CXX) --version
+	# prefer unbundled (system) libraries
+	./debian/scripts/unbundle
+
+override_dh_auto_build-arch: out/Release/gn
+	./out/Release/gn gen out/Release --args="$(defines)"
+	ninja -j$(njobs) -C out/Release chrome chrome_sandbox chromedriver minidump_stackwalk dump_syms crashpad_handler
+	cp out/Release/chrome out/Release/browser
+	cp out/Release/chromedriver out/Release/browserdriver
+	./components/crash/content/tools/generate_breakpad_symbols.py --build-dir="out/Release" \
+                                                                      --symbols-dir="out/Release/sym" \
+                                                                      --binary="out/Release/browser" --clear --verbose
+	#cp out/Release/content_shell out/Release/browser-shell
+	cp out/Release/chrome_sandbox out/Release/browser-sandbox
+	cp out/Release/locales/en-US.pak out/Release/resources
+	chmod 4755 out/Release/browser-sandbox # suid sandbox
+	sed -e s/@@PACKAGE@@/browser/g -e s/@@MENUNAME@@/browser/g \
+	    < chrome/app/resources/manpage.1.in > out/Release/browser.1
+
+override_dh_installdeb:
+
+override_dh_auto_build-indep: out/Release/gn
+	./out/Release/gn gen out/Release --args="$(defines)"
+	ninja -j$(njobs) -C out/Release packed_resources
+	rm -f out/Release/locales/en-US.pak
+
+# override_dh_shlibdeps:
+# 	dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info
+
+override_dh_auto_install-arch:
+	dh_auto_install
+	# mkdir -p debian/browser/usr/bin
+	# update launcher script with build information
+	sed 's|@BUILD_DIST@|$(shell cat /etc/debian_version)|' \
+	    < debian/scripts/browser > debian/org.deepin.browser/usr/bin/browser
+	# move icons into /usr/share
+	./debian/scripts/icons
+
+override_dh_fixperms:
+	dh_fixperms --exclude browser-sandbox
+
+override_dh_auto_clean:
+	rm -rf out
+	find . -name \*.pyc -execdir rm -f {} \;
+	dh_auto_clean
+
+###################### upstream source downloading ############################
+
+url=https://gsdview.appspot.com/chromium-browser-official
+version=$(shell dpkg-parsechangelog -S Version | sed s/-.*//)
+extract=chromium-$(version)
+tarfile=$(extract)-lite.tar
+tarball=$(tarfile).xz
+debvers=../chromium_$(version)
+origtxz=$(debvers).orig.tar.xz
+removed=$(debvers).files-removed
+seconds=$(debvers).seconds
+
+get-orig-source:
+	wget -nv --show-progress -c $(url)/$(tarball) -O ../$(tarball)
+	cp /usr/share/perl5/Devscripts/MkOrigtargz.pm debian/scripts/mk-origtargz
+	patch -p1 < debian/scripts/mk-origtargz.patch
+	date +%s > $(seconds)
+	perl debian/scripts/mk-origtargz ../$(tarball) > $(removed)
+	echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+	test ! -e $(extract) || rm -rf $(extract)
+	tar xf ../$(tarball)
+	echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+	while read line; do rm -rf $$line; done < $(removed)
+	cd $(extract) && ../debian/scripts/check-upstream
+	echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+	test ! -e $(origtxz) || rm -f $(origtxz)
+	tar cf - $(extract) | xz -6 -T $(njobs) - > $(origtxz)
+	echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds
+	rm -rf $(extract)
+	echo $$(($$(date +%s) - $$(cat $(seconds)))) seconds | tee seconds
+	@mv -f seconds $(seconds)

@@ -1,0 +1,6 @@
+# currently unavoidable embedded libraries
+embedded-library usr/lib/browser/browser: sqlite
+
+
+# sandbox is intentionally suid
+setuid-binary usr/lib/browser/browser-sandbox 4755 root/root
