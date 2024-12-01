@@ -1,0 +1,122 @@
+<link rel="import" href="chrome://resources/html/polymer.html">
+
+<link rel="import" href="chrome://resources/cr_elements/md_select_css.html">
+<link rel="import" href="chrome://resources/cr_elements/policy/cr_policy_pref_behavior.html">
+<link rel="import" href="chrome://resources/cr_elements/policy/cr_policy_pref_indicator.html">
+<link rel="import" href="chrome://resources/html/assert.html">
+<link rel="import" href="pref_control_behavior.html">
+<link rel="import" href="../i18n_setup.html">
+<link rel="import" href="../prefs/pref_util.html">
+<link rel="import" href="../settings_shared_css.html">
+<link rel="import" href="../settings_vars_css.html">
+
+<dom-module id="settings-dropdown-menu">
+  <template>
+    <style include="settings-shared md-select">
+      :host {
+        align-items: center;
+        display: inline-flex;
+      }
+
+      /* When settings-dropdown-menu is start-aligned, we probably want policy
+       * indicator to be be displayed after the dropdown.
+       * Setting --settings-dropdown-menu-policy-order to 1 will do the job.
+       */
+      cr-policy-pref-indicator {
+        height: var(--iron-icon-width, 24px);
+        margin: 0 var(--settings-controlled-by-spacing);
+        order: var(--settings-dropdown-menu-policy-order, 0);
+        width: var(--iron-icon-width, 24px);
+      }
+
+      /* Hide "Custom" value when unselectable. */
+      option:disabled {
+        display: none;
+      }
+      .md-select {
+        position: relative;
+        box-sizing: border-box;
+      }
+      .select-ul {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 9px 0px;
+        border-radius: 18px;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        margin: 0px;
+        box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.2);
+        z-index: 9;
+        display: none;
+        max-height: 300px;
+        overflow: auto;
+        background: var(--setting-dropdown-background);
+        background-size: 100% 100%;
+      }
+      .select-ul::-webkit-scrollbar {
+        width: 6px;
+        border-radius: 18px;
+        background-color: var(--setting-dropdown-background);
+      }
+      .select-ul::-webkit-scrollbar-thumb {
+        background-color: var(--setting-scrollbar-background-color);
+        border: 1px solid var(--setting-menu-hover-background-color);
+        border-radius: 4px;
+      }
+      :host([fixedWidthFont]) .select-ul {
+        bottom: 0;
+        top: inherit;
+      }
+      .select-ul>li {
+        width: 210px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 32px;
+        line-height: 1;
+        font-weight: 500;
+        text-align: left;
+        color: var(--setting-dropdown-font-color);
+        list-style: none;
+        box-sizing: border-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-bottom: 1px;
+      }
+      .select-ul>li.select {
+        background-image: var(--setting-dropdown-checked-icon);
+        background-repeat: no-repeat;
+        background-size: 15px 13px;
+        background-position: 11px center;
+      }
+      .select-ul>li:hover {
+        color: #fff;
+        background-color: var(--cr-sidebar-active-background-color);
+        box-shadow: 0px 4px 6px 0px var(--cr-sidebar-active-box-shadow);
+      }
+      .select-ul>li.select:hover {
+        background-image: url(chrome://theme/MENUITEM_SELECT_HOVER);
+      }
+      .select-value {
+        overflow: hidden;
+        white-space: nowrap;
+      }
+    </style>
+    <template is="dom-if" if="[[pref.controlledBy]]" restamp>
+      <cr-policy-pref-indicator pref="[[pref]]"></cr-policy-pref-indicator>
+    </template>
+    <div class="md-select" id="dropdownMenu" on-click="showOption"
+        aria-label$="[[label]]"
+        disabled="[[shouldDisableMenu_(disabled, menuOptions, pref.*)]]">
+      <div class="select-value" hidden="[[showNotFoundValue_(menuOptions, pref.value)]]">[[dropdownValue]]</div>
+      <div class="select-value" hidden="[[!showNotFoundValue_(menuOptions, pref.value)]]"> $i18n{custom}</div>
+      <ul class="select-ul">
+        <template is="dom-repeat" items="[[menuOptions]]">
+          <li class$="[[showSelect(dropdownValue,item.name)]]" on-click="selectClick">[[item.name]]</li>
+        </template>
+        <li class="select" hidden="[[!showNotFoundValue_(menuOptions, pref.value)]]">$i18n{custom}</li>
+      </ul>
+    </div>
+  </template>
+  <script src="settings_dropdown_menu.js"></script>
+</dom-module>

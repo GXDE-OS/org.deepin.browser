@@ -1,0 +1,267 @@
+<!DOCTYPE HTML>
+<html dir="$i18n{textdirection}">
+<head>
+ <meta charset="utf-8">
+ <title>$i18n{newtabTitle}</title>
+ <link rel="stylesheet" href="normal.css">
+ <link rel="stylesheet" href="customize_newtab.css">
+</head>
+<body class="newtab">
+  <!--背景图-->
+  <div class="bg-cover">
+    <div class="bg"></div>
+  </div>
+  <div class="main-flex-wrap">
+    <div class="search-wrap">
+      <ul class="search-list">
+        <li data-index=0 class="active">$i18n{webpage}</li>
+        <li data-index=1>$i18n{images}</li>
+        <li data-index=2 class="news">$i18n{news}</li>
+        <li data-index=3>$i18n{videos}</li>
+        <li class="map" data-index=4>$i18n{maps}</li>
+      </ul>
+      <div class="search">
+        <div class="head"> 
+          <img src=""> 
+        </div> 
+        <div class="search-input"> 
+          <input type="text" name="wd" class="txt search_value" autofocus="" opacity-level="10" autocomplete="off" placeholder="$i18n{search}" value=""> 
+          <div class="search-type-box">
+            <dl class="list-item" data-index="0">
+              <dt><img src="chrome://theme/IDR_ICON_BD" alt="$i18n{search_engine_baidu}"></dt>
+              <dd>$i18n{search_engine_baidu}</dd>
+            </dl>
+            <dl class="list-item" data-index="1">
+              <dt>
+                <img src="chrome://theme/IDR_ICON_SG" alt="$i18n{search_engine_sogou}">
+              </dt>
+              <dd>$i18n{search_engine_sogou}</dd>
+            </dl>
+            <dl class="list-item" data-index="2">
+              <dt>
+                <img src="chrome://theme/IDR_ICON_360" alt="360">
+              </dt>
+              <dd>360</dd>
+            </dl>
+            <dl class="list-item" data-index="3">
+              <dt>
+                <img src="chrome://theme/IDR_ICON_BING" alt="Bing">
+              </dt>
+              <dd>Bing</dd>
+            </dl>
+            <dl class="list-item" data-index="4">
+              <dt>
+                <img src="chrome://theme/IDR_ICON_GOOGLE" alt="Google">
+              </dt>
+              <dd>Google</dd>
+            </dl>
+            <dl class="list-item" data-index="5">
+              <dt>
+                <img src="chrome://theme/IDR_ICON_YAHOO" alt="Yahoo!">
+              </dt>
+              <dd>Yahoo!</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="home-slider-wrap" id="homeSlider">
+      <div class="list">
+        <div class="slider-inner-box">
+          <div class="inner-item">
+            <!-- <div class="item drag-item" data-url="http://www.gov.cn/"  draggable="false"> 
+              <dl class="item-move-hover">
+                <dt class="default">
+                  <div class="thumb" style="background-image:url(chrome://theme/IDR_LOGO_1);"></div>
+                  <span class="btn-del"></span>
+                  <span class="btn-edit"></span>
+                </dt>
+                <dd>中国政府网</dd>
+              </dl>
+            </div>
+            <div class="item drag-item" data-url="http://www.xinhuanet.com/"  draggable="false"> 
+              <dl class="item-move-hover">
+                <dt class="default">
+                  <div class="thumb" style="background-image:url(chrome://theme/IDR_LOGO_2);"></div>
+                  <span class="btn-del"></span>
+                  <span class="btn-edit"></span>
+                </dt>
+                <dd>新华网</dd>
+              </dl>
+            </div>
+            <div class="item drag-item" data-url="http://www.people.com.cn/"  draggable="false"> 
+              <dl class="item-move-hover">
+                <dt class="default">
+                  <div class="thumb" style="background-image:url(chrome://theme/IDR_LOGO_3);"></div>
+                  <span class="btn-del"></span>
+                  <span class="btn-edit"></span>
+                </dt>
+                <dd>人民网</dd>
+              </dl>
+            </div>
+            <div class="item drag-item" data-url="https://cn.chinadaily.com.cn/"  draggable="false"> 
+              <dl class="item-move-hover">
+                <dt class="default">
+                  <div class="thumb" style="background-image:url(chrome://theme/IDR_LOGO_4);"></div>
+                  <span class="btn-del"></span>
+                  <span class="btn-edit"></span>
+                </dt>
+                <dd>中国日报</dd>
+              </dl>
+            </div>
+            <div class="item drag-item" data-url="https://www.cctv.com/"  draggable="false"> 
+              <dl class="item-move-hover">
+                <dt class="default">
+                  <div class="thumb" style="background-image:url(chrome://theme/IDR_LOGO_5);"></div>
+                  <span class="btn-del"></span>
+                  <span class="btn-edit"></span>
+                </dt>
+                <dd>央视网</dd>
+              </dl>
+            </div>
+            <div class="item drag-item" data-url="http://www.cnr.cn/"  draggable="false"> 
+              <dl class="item-move-hover">
+                <dt class="default">
+                  <div class="thumb" style="background-image:url(chrome://theme/IDR_LOGO_6);"></div>
+                  <span class="btn-del"></span>
+                  <span class="btn-edit"></span>
+                </dt>
+                <dd>央广网</dd>
+              </dl>
+            </div>
+            <div class="item drag-item" data-url="https://www.sina.com.cn/"  draggable="false"> 
+              <dl class="item-move-hover">
+                <dt class="default">
+                  <div class="thumb" style="background-image:url(chrome://theme/IDR_LOGO_7);"></div>
+                  <span class="btn-del"></span>
+                  <span class="btn-edit"></span>
+                </dt>
+                <dd>新浪</dd>
+              </dl>
+            </div>
+            <div class="item drag-item" data-url="https://www.163.com/"  draggable="false"> 
+              <dl class="item-move-hover">
+                <dt class="default">
+                  <div class="thumb" style="background-image:url(chrome://theme/IDR_LOGO_8);"></div>
+                  <span class="btn-del"></span>
+                  <span class="btn-edit"></span>
+                </dt>
+                <dd>网易</dd>
+              </dl>
+            </div>
+            <div class="item drag-item" data-url="https://www.qq.com/"  draggable="false"> 
+              <dl class="item-move-hover">
+                <dt class="default">
+                  <div class="thumb" style="background-image:url(chrome://theme/IDR_LOGO_9);"></div>
+                  <span class="btn-del"></span>
+                  <span class="btn-edit"></span>
+                </dt>
+                <dd>腾讯</dd>
+              </dl>
+            </div>
+            <div class="item drag-item" data-url="https://www.sohu.com/"  draggable="false"> 
+              <dl class="item-move-hover">
+                <dt class="default">
+                  <div class="thumb" style="background-image:url(chrome://theme/IDR_LOGO_10);"></div>
+                  <span class="btn-del"></span>
+                  <span class="btn-edit"></span>
+                </dt>
+                <dd>搜狐</dd>
+              </dl>
+            </div>
+            <div class="item drag-item" data-url="https://www.ifeng.com/"  draggable="false"> 
+              <dl class="item-move-hover">
+                <dt class="default">
+                  <div class="thumb" style="background-image:url(chrome://theme/IDR_LOGO_11);"></div>
+                  <span class="btn-del"></span>
+                  <span class="btn-edit"></span>
+                </dt>
+                <dd>凤凰网</dd>
+              </dl>
+            </div>
+            <div class="item drag-item" data-url="http://www.china.com.cn/"  draggable="false"> 
+              <dl class="item-move-hover">
+                <dt class="default">
+                  <div class="thumb" style="background-image:url(chrome://theme/IDR_LOGO_12);"></div>
+                  <span class="btn-del"></span>
+                  <span class="btn-edit"></span>
+                </dt>
+                <dd>中国网</dd>
+              </dl>
+            </div> -->
+            <!-- <div class="item">
+
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="dialog-box">
+    <div class="dialog">
+      <div class="content-wrapper">
+        <div slot="newtab" class="set-head">
+          <div class="msg-icon"></div>
+          <div class="close-icon"></div>
+        </div>
+        <div class="title" slot="title">
+          
+        </div>
+        <div slot="body">
+          <div class="cr-input">
+            <div class="label">
+              $i18n{nameField}
+            </div>
+            <div class="row-container" part="row-container">
+              <div class="input-container">
+                <div class="inner-input-container">
+                  <input id="name" class="input" maxlength="12">
+                </div>
+              </div>
+            </div>
+            <div class="error" id="name-error">$i18n{nameError}</div>
+          </div>
+          <div class="cr-input">
+            <div class="label">
+              $i18n{urlField}
+            </div>
+            <div class="row-container" part="row-container">
+              <div class="input-container">
+                <div class="inner-input-container">
+                  <input id="url" class="input">
+                </div>
+              </div>
+            </div>
+            <div class="error" id="url-error">$i18n{invalidUrl}</div>
+          </div>
+        </div>
+        <div slot="button-container">
+          <button class="cr-button cancel-button">$i18n{linkCancel}</button>
+          <button class="cr-button action-button">$i18n{linkDone}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="context-menu-wrap" id="contextMenuWrap">
+    <ul class="list">
+      <input type="button" data-type="edit" class="context-li edit" value="$i18n{editLinkTitle}">
+      <!-- <hr> -->
+      <input type="button" data-type="del" class="context-li" value="$i18n{linkRemove}">
+    </ul>
+  </div>
+  <div class="float-info">
+    <span class="float-title"></span>
+    <span class="backout">$i18n{undo}</span>
+    <span class="reset">$i18n{restoreDefaultLinks}</span>
+  </div>
+  <iframe src="chrome://bookmarks/" hidden frameborder="0"></iframe>
+  <script src="chrome://resources/js/cr.js"></script>
+  <script src="chrome://resources/js/load_time_data.js"></script>
+  <script src="chrome://resources/js/util.js"></script>
+  <script src="chrome://resources/js/icon.js"></script>
+  <script src="jquery.js"></script>
+  <script src="strings.js"></script>
+  <script src="right_click.js"></script>
+  <script src="customize_newtab.js"></script>
+</body>
+</html>

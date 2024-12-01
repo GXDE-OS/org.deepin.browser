@@ -1,0 +1,155 @@
+<style include="shared-style cr-icons">
+  :host {
+    align-items: center;
+    color: inherit;
+    display: flex;
+    flex-direction: row;
+    height: 36px;
+    /* padding-inline-start: 20px; */
+    position: relative;
+    text-decoration: none;
+    user-select: none;
+    border-radius: 8px;
+    outline: none;
+    margin-top: 10px;
+  }
+
+  :host([is-selected-item_]) .bookmarks-item{
+    /* background-color: rgba(0, 129, 255, 1); */
+    background: var(--cr-sidebar-active-background-color);
+    border-radius: 8px;
+  }
+
+  :host([class=drag-on]) .bookmarks-item {
+    background: var(--cr-sidebar-active-background-color);
+    border-radius: 8px;
+  }
+
+  :host([class=drag-on]) #website-title {
+    color: #ffffff;
+  }
+
+  :host([is-selected-item_]) cr-icon-button {
+    --cr-icon-button-fill-color-focus: var(--highlight-color);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :host([is-selected-item_]),
+    :host([is-selected-item_]) .folder-icon {
+      color: var(--google-grey-refresh-700);
+    }
+  }
+
+  #website-title {
+    color: var(--cr-bookmarks-website-font-color);
+    /* flex: 1; */
+    margin-inline-start: 10px;
+    text-decoration: none;
+    font-weight: 500;
+    max-width: 200px;
+  }
+
+  :host([is-selected-item_]) #website-title {
+    color: #ffffff;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :host([is-selected-item_]) #website-title {
+      color: var(--google-grey-900);
+    }
+  }
+
+  #website-url {
+    /* Transparent version of --cr-secondary-text-color */
+    display: none;
+    flex: 1;
+    margin-inline-start: 10px;
+    min-width: 100px;
+    font-weight: 500;
+    color: #576282;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    #website-url {
+      color: var(--google-grey-800);
+    }
+  }
+
+  :host([is-selected-item_]) #website-url {
+    display: block;
+    color: #dfefff;
+  }
+
+  #icon {
+    flex: none;
+  }
+
+  cr-icon-button {
+    margin-inline-end: 12px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :host([is-selected-item_]) cr-icon-button {
+      --cr-icon-button-fill-color: var(--google-grey-700);
+    }
+  }
+
+  :host(:focus) {
+    z-index: 1;
+  }
+
+  .elided-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  #menuButton {
+    --cr-icon-button-margin-end: 40px;
+    --cr-icon-button-margin-start: 20px;
+    width: 36px;
+    height: 36px;
+    /* background: url(chrome://theme/IDR_HISTORY_MORE_DARK) no-repeat 100% 100%; */
+    background: var(--cr-menu-btn-icon-img) no-repeat 100% 100%;
+    --cr-icon-button-fill-color: none;
+  }
+  .bookmarks-item {
+    align-items: center;
+    color: inherit;
+    display: flex;
+    flex-direction: row;
+    height: 36px;
+    width: 100%;
+    padding-left: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  /* :host([class=drag-below]) .line {
+    display: block;
+    bottom: -10px;
+  }
+  :host([class=drag-above]) .line {
+    display: block;
+    top: -10px;
+  } */
+</style>
+<div class="bookmarks-item">
+  <div id="icon"></div>
+  <div id="website-title" class="elided-text" title="[[item_.title]]">
+    [[item_.title]]
+  </div>
+  <div id="website-url" class="elided-text" title="[[item_.url]]">
+    [[item_.url]]
+  </div>
+</div>
+<cr-icon-button class="icon-more-vert"
+    id="menuButton"
+    tabindex="[[ironListTabIndex]]"
+    title="$i18n{moreActionsButtonTitle}"
+    aria-label$="[[getButtonAriaLabel_(item_, isSelectedItem_,
+        isMultiSelect_)]]"
+    on-click="onMenuButtonClick_"
+    aria-haspopup="menu"></cr-icon-button>
+<!-- <div class="line">
+  <div class="line-content"></div>
+</div> -->

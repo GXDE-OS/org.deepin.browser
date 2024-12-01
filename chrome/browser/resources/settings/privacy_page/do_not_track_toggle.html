@@ -1,0 +1,120 @@
+<link rel="import" href="chrome://resources/html/polymer.html">
+
+<link rel="import" href="chrome://resources/cr_elements/cr_button/cr_button.html">
+<link rel="import" href="chrome://resources/cr_elements/cr_dialog/cr_dialog.html">
+<link rel="import" href="chrome://resources/html/cr/ui/focus_without_ink.html">
+<link rel="import" href="../metrics_browser_proxy.html">
+<link rel="import" href="../settings_shared_css.html">
+<link rel="import" href="../controls/settings_toggle_button.html">
+
+<dom-module id="settings-do-not-track-toggle">
+  <template>
+    <style include="settings-shared">
+      #confirmDialog{
+        --cr-dialog-top-container-min-height:0px;
+      }
+      .ms-title{
+        font-weight: 500;
+        text-align: center;
+        color: var(--cr-my-dialog-title-color);
+        line-height: 1.43;
+        padding: 0;
+        margin-bottom: 5px;
+        font-size: 100%;
+      }
+      .set-head{
+        display: flex;
+        height: 48px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 10px;
+      }
+      .set-head .msg-icon{
+        width: 32px;
+        height: 32px;
+        background: url(chrome://resources/images/deepin_cloudprint_config_helper.svg) no-repeat center;
+        background-size: contain;
+      }
+      .set-head .close-icon{
+        width: 22px;
+        height: 22px;
+        background: var(--cr-my-dialog-close-normal) no-repeat center;
+        background-size: 11px;
+        margin: 0px 4px;
+      }
+      .x-width{
+        width: 380px;
+        line-height: 1.43;
+        box-sizing: border-box;
+        color: var(--setting-profile-font-color);
+      }
+      .footer-btn{
+        padding-left: 10px;
+        padding-right: 10px;
+        justify-content: space-between;
+        margin-top: 20px;
+        padding-top: 0;
+        align-items: center;
+        padding-bottom: 10px;
+      }
+      .footer-btn cr-button{
+        width: 170px;
+        height: 36px;
+        font-weight: 500;
+        border-radius: 8px;
+      }
+      .cancel-button{
+        background: var(--cr-my-dialog-cancel-btn);
+        border: 1px solid var(--cr-my-dialog-cancel-btn-border-color);
+        border-radius: 8px;
+        box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.05); 
+        color: var(--cr-input-font-color);
+        margin-right: 0;
+      }
+      .action-button{
+        background: var(--cr-my-dialog-save-btn);
+        border: 1px solid rgba(0,0,0,0.03);
+        border-radius: 8px;
+        box-shadow: 0px 4px 4px 0px var(--cr-my-dialog-save-btn-box-shadow);
+      }
+      .line {
+        width: 1px;
+        height: 28px;
+        background: var(--cr-my-dialog-line-color);
+      }
+      cr-dialog{
+          --cr-my-container-overflow:auto;
+        }
+    </style>
+    <settings-toggle-button id="toggle" label="$i18n{doNotTrack}"
+        pref="{{prefs.enable_do_not_track}}"
+        on-settings-boolean-control-change="onToggleChange_"
+        no-set-pref>
+    </settings-toggle-button>
+    <template is="dom-if" if="[[showDialog_]]"
+        on-dom-change="onDomChange_" restamp>
+      <cr-dialog id="confirmDialog"
+          close-text="$i18n{close}" on-cancel="onDialogCancel_"
+          on-close="onDialogClosed_">
+        <div slot="setting" class="set-head">
+          <div class="msg-icon"></div>
+          <div class="close-icon" on-click="onDialogCancel_"></div>
+        </div>
+        <div slot="title" class="ms-title">$i18n{doNotTrackDialogTitle}</div>
+        <div slot="body" class="x-width">$i18nRaw{doNotTrackDialogMessage}</div>
+        <div slot="button-container" class="footer-btn">
+          <cr-button class="cancel-button"
+              on-click="onDialogCancel_">
+            $i18n{cancel}
+          </cr-button>
+          <div class="line"></div>
+          <cr-button class="action-button"
+              on-click="onDialogConfirm_">
+            $i18n{confirm}
+          </cr-button>
+        </div>
+      </cr-dialog>
+    </template>
+  </template>
+  <script src="do_not_track_toggle.js"></script>
+</dom-module>

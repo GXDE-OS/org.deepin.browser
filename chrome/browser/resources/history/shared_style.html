@@ -1,0 +1,70 @@
+  <template>
+    <style include="cr-hidden-style">
+      a {
+        color: var(--cr-link-color);
+        text-decoration: none;
+      }
+
+      .card-title {
+        align-items: center;
+        border-bottom: 1px solid var(--card-border-color);
+        display: flex;
+        font-size: 108%;
+        font-weight: 500;
+        height: 48px;
+        line-height: 48px;
+        overflow: hidden;
+        padding: 0 20px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .centered-message {
+        height: 100%;
+        max-width: 1000px;
+        font-size: 20px;
+        font-weight: Normal;
+        color: var(--cr-iron-no-result-font-color);
+        margin: 0 auto;
+        box-sizing: border-box;
+      }
+      .centered-message .message-content {
+        justify-content: center;
+        user-select: none;
+        white-space: nowrap;
+        height: 100%;
+        align-items: center;
+        cursor: default;
+        display: flex;
+        font-weight: 500;
+      }
+
+      .website-icon {
+        background-repeat: no-repeat;
+        background-size: 16px;
+        flex: none;
+        height: 16px;
+        width: 16px;
+      }
+
+      .website-link {
+        align-items: center;
+        color: var(--cr-primary-text-color);
+        display: flex;
+        overflow: hidden;
+        text-decoration: none;
+      }
+      .website-link:focus {
+        outline: none;
+      }
+
+      .website-title {
+        margin-inline-start: 16px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-weight: 500;
+        color: var(--cr-toolbar-search-field-prompt-color);
+      }
+    </style>
+  </template>

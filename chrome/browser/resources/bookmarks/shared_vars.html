@@ -1,0 +1,34 @@
+<custom-style>
+<style>
+  html {
+    --card-max-width: 960px;
+    --card-padding-side: 32px;
+    --folder-icon-color: #757575;
+    --folder-inactive-color: #5a5a5a;
+    --highlight-color: #0081FF;
+    --interactive-color: #0081FF;
+    --iron-icon-height: 20px;
+    --iron-icon-width: 20px;
+    --min-sidebar-width: 256px;
+    --splitter-width: 15px;
+    /* light */
+    --cr-bookmarks-website-font-color: #576282;
+    --cr-bookmarks-shared-line-color: rgba(0, 0, 0, 0.11);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    html {
+      --folder-icon-color: var(--google-grey-refresh-500);
+      --folder-inactive-color: var(--google-grey-refresh-500);
+      --highlight-color: var(--google-blue-refresh-300);
+      --interactive-color: #0081FF;
+    }
+  }
+
+  html .dark {
+    --cr-bookmarks-website-font-color: var(--cr-toolbar-font-color);
+    --cr-bookmarks-shared-line-color: rgba(255, 255, 255, 0.05);
+    --folder-inactive-color: var(--cr-toolbar-font-color);
+  }
+</style>
+</custom-style>

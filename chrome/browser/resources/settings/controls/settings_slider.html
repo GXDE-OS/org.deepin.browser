@@ -1,0 +1,122 @@
+<link rel="import" href="chrome://resources/html/polymer.html">
+
+<link rel="import" href="chrome://resources/cr_elements/policy/cr_policy_pref_behavior.html">
+<link rel="import" href="chrome://resources/html/assert.html">
+<link rel="import" href="chrome://resources/cr_elements/cr_slider/cr_slider.html">
+<link rel="import" href="../settings_vars_css.html">
+<link rel="import" href="../i18n_setup.html">
+
+<dom-module id="settings-slider">
+  <template>
+    <style>
+      :host {
+        display: inline-flex;
+      }
+
+      cr-policy-pref-indicator {
+        align-self: center;
+        margin-inline-start: var(--settings-controlled-by-spacing);
+      }
+
+      #labels[disabled] {
+        color: var(--paper-grey-400);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        #labels[disabled] {
+          color: var(--google-grey-refresh-500);
+        }
+      }
+
+      div.outer {
+        align-items: stretch;
+        display: flex;
+        flex-direction: column;
+        padding: 8px 0;
+        /* min-width: 200px; */
+        min-width: 100%; 
+      }
+
+      #labels {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin: 10px 18px 0 21px;
+      }
+
+      #labels > div {
+        font-size: 12px;
+        position: relative;
+        color: var(--setting-slider-tips-font-color);
+      }
+
+      #label-begin {
+        margin-inline-end: 4px;
+      }
+      #label-begin::before{
+        width: 1px;
+        height: 12px;
+        display: block;
+        content: '';
+        opacity: 0.4;
+        background: var(--setting-slider-line-color);
+        position: absolute;
+        left: 2px;
+        top: -14px;
+      }
+      #label-end {
+        margin-inline-start: 4px;
+      }
+      #label-end::before {
+        width: 1px;
+        height: 12px;
+        display: block;
+        content: '';
+        opacity: 0.4;
+        background: var(--setting-slider-line-color);
+        position: absolute;
+        right: 2px;
+        top: -14px;
+      }
+      cr-slider{
+        --cr-slider-container-image: var(--setting-slider-icon) no-repeat left;
+        --my-slider-height:4px;
+        --cr-slider-container-color:none;
+        --my--slider-border:none;
+        --my-slider-bar:none;
+        --my-border:none;
+        --cr-knob-width:33px;
+        --cr-knob-height:36px;
+        --cr-knob-backimg: var(--setting-slider-knob-icon) no-repeat center;
+        --cr-label-height:20px;
+        --cr-label-top:14px;
+        --my-shadow:none;
+        --my-label-padding:0;
+        --cr-label-width:38px;
+        --cr-section-vertical-padding:0;
+        --cr-label-top:23px;
+        --cr-label-index:123;
+        padding-left: 22px;
+        padding-right: 20px;
+      }
+    </style>
+    <template is="dom-if" if="[[pref.controlledBy]]" restamp>
+      <cr-policy-pref-indicator pref="[[pref]]"></cr-policy-pref-indicator>
+    </template>
+    <div class="outer">
+      <cr-slider id="slider" disabled$="[[disableSlider_]]" ticks="[[ticks]]"
+          on-cr-slider-value-changed="onSliderChanged_" max="[[max]]"
+          min="[[min]]" on-dragging-changed="onSliderChanged_"
+          on-updating-from-key="onSliderChanged_"
+          aria-roledescription$="[[getRoleDescription_()]]"
+          aria-label$="[[labelAria]]">
+      </cr-slider>
+      <!-- aria-hidden because role description on #slider contains min/max. -->
+      <div id="labels" disabled$="[[disableSlider_]]" aria-hidden="true">
+        <div id="label-begin">[[labelMin]]</div>
+        <div id="label-end">[[labelMax]]</div>
+      </div>
+    </div>
+  </template>
+  <script src="settings_slider.js"></script>
+</dom-module>

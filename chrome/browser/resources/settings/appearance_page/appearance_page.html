@@ -1,0 +1,300 @@
+<link rel="import" href="chrome://resources/html/polymer.html">
+
+<link rel="import" href="chrome://resources/cr_elements/cr_button/cr_button.html">
+<link rel="import" href="chrome://resources/cr_elements/cr_link_row/cr_link_row.html">
+<link rel="import" href="chrome://resources/html/assert.html">
+<link rel="import" href="chrome://resources/html/i18n_behavior.html">
+<link rel="import" href="chrome://resources/cr_elements/md_select_css.html">
+<link rel="import" href="appearance_browser_proxy.html">
+<link rel="import" href="../controls/controlled_radio_button.html">
+<link rel="import" href="../controls/extension_controlled_indicator.html">
+<link rel="import" href="../controls/settings_dropdown_menu.html">
+<link rel="import" href="../controls/settings_radio_group.html">
+<link rel="import" href="../controls/settings_toggle_button.html">
+<link rel="import" href="../i18n_setup.html">
+<link rel="import" href="../page_visibility.html">
+<link rel="import" href="../route.html">
+<link rel="import" href="../router.html">
+<link rel="import" href="../settings_page/settings_animated_pages.html">
+<link rel="import" href="../settings_page/settings_subpage.html">
+<link rel="import" href="../settings_shared_css.html">
+<link rel="import" href="../settings_vars_css.html">
+<link rel="import" href="home_url_input.html">
+
+<dom-module id="settings-appearance-page">
+  <template>
+    <style include="settings-shared md-select iron-flex">
+      /* Lines up with cr-input. */
+      #custom-input {
+        /* (cr-input line-height + cr-input top/bottom padding) / 2 -
+           cr-radio disc-wrapper height / 2 */
+        --cr-radio-button-disc-margin-block-start: calc(
+            (1.54em + 12px) / 2 - 8px);
+            align-items: baseline;
+      }
+
+      /* The theme mixes a link and a cr-button divided by a separator with
+       * grit expressions and dom-if templates. That leads to a tricky thing
+       * to style correctly, these are a workaround. */
+      #themeRow cr-button {
+        margin-inline-end: 20px;
+      }
+
+      #themeRow .separator {
+         margin-inline-start: 0;
+      }
+      cr-link-row{
+        background: rgba(0,0,0,0.03);
+        border-top: 1px solid var(--setting-link-row-border-color);
+      }
+      .settings-box{
+        min-height: 56px;
+        color: var(--cr-toolbar-search-field-prompt-color);
+      }
+      /*子页面宽度为920 不足1000*/
+      settings-subpage{
+        left: -40px;
+        right: -40px;
+        padding: 0 40px;
+      }
+      .list-frame{
+        padding-left: 40px;
+        padding-bottom: 10px;
+        background: rgba(0,0,0,0.03);
+      }
+      settings-toggle-button{
+        min-height: 40px;
+      }
+      .over-flow{
+        border-radius: 8px;
+        /* overflow: hidden; */
+        background: var(--setting-link-row-background-color);
+      }
+      .iron-selected {
+        overflow: visible;
+      }
+      .md-select {
+        position: relative;
+        box-sizing: border-box;
+      }
+      .select-ul {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 9px 0px;
+        border-radius: 18px;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        margin: 0px;
+        box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.2);
+        z-index: 9;
+        display: none;
+        max-height: 300px;
+        overflow: auto;
+        background: var(--setting-dropdown-background);
+        background-size: 100% 100%;
+      }
+      .select-ul::-webkit-scrollbar {
+        width: 6px;
+        border-radius: 18px;
+        background-color: var(--setting-dropdown-background);
+      }
+      .select-ul::-webkit-scrollbar-thumb {
+        background-color: var(--setting-scrollbar-background-color);
+        border: 1px solid var(--setting-menu-hover-background-color);
+        border-radius: 4px;
+      }
+      .select-ul>li {
+        width: 210px;
+        font-weight: 500;
+        text-align: left;
+        color: var(--setting-dropdown-font-color);
+        list-style: none;
+        box-sizing: border-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-bottom: 1px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 32px;
+        line-height: 1;
+      }
+      .select-ul>li.select {
+        background-image: var(--setting-dropdown-checked-icon);
+        background-repeat: no-repeat;
+        background-size: 15px 13px;
+        background-position: 11px center;
+      }
+      .select-ul>li:hover {
+        color: #fff;
+        background-color: var(--cr-sidebar-active-background-color);
+        box-shadow: 0px 4px 6px 0px var(--cr-sidebar-active-box-shadow);
+      }
+      .select-ul>li.select:hover {
+        background-image: url(chrome://theme/MENUITEM_SELECT_HOVER);
+      }
+      .over-flow cr-link-row,.over-flow settings-toggle-button,.over-flow .settings-box,.over-flow .list-frame{
+        background: none !important;
+      }
+      .select-value {
+        overflow: hidden;
+        white-space: nowrap;
+      }
+    </style>
+    <settings-animated-pages id="pages" section="appearance"
+        focus-config="[[focusConfig_]]">
+      <div route-path="default" class="over-flow">
+        <!-- <div class="settings-row continuation" id="themeRow"
+            hidden="[[!pageVisibility.setTheme]]">
+          <cr-link-row class="first" hidden="[[!pageVisibility.setTheme]]"
+              label="$i18n{themes}" sub-label="[[themeSublabel_]]"
+              on-click="openThemeUrl_" external></cr-link-row>
+<if expr="not is_linux or chromeos">
+          <template is="dom-if" if="[[prefs.extensions.theme.id.value]]">
+            <div class="separator"></div>
+            <cr-button id="useDefault" on-click="onUseDefaultTap_">
+              $i18n{resetToDefaultTheme}
+            </cr-button>
+          </template>
+</if>
+<if expr="is_linux and not chromeos">
+          <div class="settings-row continuation"
+              hidden="[[!showThemesSecondary_(
+                  prefs.extensions.theme.id.value, useSystemTheme_)]]"
+              id="themesSecondaryActions">
+            <div class="separator"></div>
+            <template is="dom-if" if="[[showUseClassic_(
+                prefs.extensions.theme.id.value, useSystemTheme_)]]" restamp>
+              <cr-button id="useDefault" on-click="onUseDefaultTap_">
+                $i18n{useClassicTheme}
+              </cr-button>
+            </template>
+            <template is="dom-if" if="[[showUseSystem_(
+                prefs.extensions.theme.id.value, useSystemTheme_)]]" restamp>
+              <cr-button id="useSystem" on-click="onUseSystemTap_">
+                $i18n{useSystemTheme}
+              </cr-button>
+            </template>
+          </div>
+</if>
+        </div> -->
+        <!-- <settings-toggle-button elide-label
+            hidden="[[!pageVisibility.homeButton]]"
+            pref="{{prefs.browser.show_home_button}}"
+            label="$i18n{showHomeButton}"
+            sub-label="[[getShowHomeSubLabel_(
+                prefs.browser.show_home_button.value,
+                prefs.homepage_is_newtabpage.value,
+                prefs.homepage.value)]]">
+        </settings-toggle-button> -->
+        <settings-toggle-button hidden="[[!pageVisibility.bookmarksBar]]"
+            pref="{{prefs.bookmark_bar.show_on_all_tabs}}"
+            label="$i18n{showBookmarksBar}">
+        </settings-toggle-button>
+        <settings-toggle-button elide-label
+        hidden="[[!pageVisibility.homeButton]]"
+        pref="{{prefs.browser.show_home_button}}"
+        label="$i18n{showHomeButton}">
+    </settings-toggle-button>
+        <template is="dom-if" if="[[prefs.browser.show_home_button.value]]">
+          <div class="list-frame" hidden="[[!pageVisibility.homeButton]]">
+            <settings-radio-group pref="{{prefs.homepage_is_newtabpage}}">
+              <controlled-radio-button class="list-item" name="true"
+                  pref="[[prefs.homepage_is_newtabpage]]"
+                  label="$i18n{homePageNtp}" no-extension-indicator>
+              </controlled-radio-button>
+              <controlled-radio-button id="custom-input" class="list-item"
+                  name="false" pref="[[prefs.homepage_is_newtabpage]]"
+                  no-extension-indicator>
+                <!-- TODO(dbeam): this can show double indicators when both
+                     homepage and whether to use the NTP as the homepage are
+                     managed. -->
+                <home-url-input id="customHomePage" pref="{{prefs.homepage}}"
+                    can-tab="[[!prefs.homepage_is_newtabpage.value]]">
+                </home-url-input>
+              </controlled-radio-button>
+              <template is="dom-if" if="[[prefs.homepage.extensionId]]">
+                <extension-controlled-indicator
+                    extension-id="[[prefs.homepage.extensionId]]"
+                    extension-can-be-disabled="[[
+                        prefs.homepage.extensionCanBeDisabled]]"
+                    extension-name="[[prefs.homepage.controlledByName]]"
+                    on-disable-extension="onDisableExtension_">
+                </extension-controlled-indicator>
+              </template>
+            </settings-radio-group>
+          </div>
+        </template>
+        <cr-link-row id="importDataDialogTrigger"
+        label="$i18n{importTitle}"
+        on-click="onImportDataTap_"></cr-link-row>
+<!--delete by xiepinze, don't use system title bar, 2020/07/25, start-->
+<!--
+<if expr="is_linux and not chromeos">
+        <settings-toggle-button
+            class$="[[getFirst_(pageVisibility.bookmarksBar)]]"
+            pref="{{prefs.browser.custom_chrome_frame}}"
+            label="$i18n{showWindowDecorations}"
+            inverted>
+        </settings-toggle-button>
+</if>-->
+<!--delete by xiepinze, don't use system title bar, 2020/07/25, end-->
+        <cr-link-row class="hr" id="customize-fonts-subpage-trigger"
+        label="$i18n{customizeFonts}" on-click="onCustomizeFontsTap_"
+        role-description="$i18n{subpageArrowRoleDescription}">
+        </cr-link-row>
+        <div class="settings-box">
+          <div class="start settings-box-text" aria-hidden="true">
+            $i18n{fontSize}
+          </div>
+          <settings-dropdown-menu prefs="{{prefs}}" id="defaultFontSize" label="$i18n{fontSize}"
+              pref="{{prefs.webkit.webprefs.default_font_size}}"
+              menu-options="[[fontSizeOptions_]]">
+          </settings-dropdown-menu>
+        </div>
+        <div class="settings-box" hidden="[[!pageVisibility.pageZoom]]">
+          <div id="pageZoom" class="start settings-box-text" aria-hidden="true">
+            $i18n{pageZoom}
+          </div>
+          <div id="zoomLevel" class="md-select" aria-labelledby="pageZoom" on-click="showOption">
+            <div class="select-value">[[formatZoom_(defaultZoom_)]]%</div>
+            <ul class="select-ul">
+              <template is="dom-repeat" items="[[pageZoomLevels_]]">
+                <li class$="[[showSelect(defaultZoom_,item)]]" on-click="selectClick">[[formatZoom_(item)]]%</li>
+              </template>
+            </ul>
+          </div>
+        </div>
+        <template is="dom-if" if="[[showReaderModeOption_]]">
+          <settings-toggle-button
+              pref="{{prefs.dom_distiller.offer_reader_mode}}"
+              label="$i18n{readerMode}"
+              sub-label="$i18n{readerModeDescription}">
+          </settings-toggle-button>
+        </template>
+<if expr="is_macosx">
+        <settings-toggle-button pref="{{prefs.webkit.webprefs.tabs_to_links}}"
+            label="$i18n{tabsToLinks}">
+        </settings-toggle-button>
+        <settings-toggle-button pref="{{prefs.browser.confirm_to_quit}}"
+            label="$i18n{warnBeforeQuitting}">
+        </settings-toggle-button>
+</if>
+      </div>
+      <template is="dom-if" route-path="/fonts">
+        <settings-subpage
+            associated-control="[[$$('#customize-fonts-subpage-trigger')]]"
+            page-title="$i18n{customizeFonts}">
+          <settings-appearance-fonts-page prefs="{{prefs}}">
+          </settings-appearance-fonts-page>
+        </settings-subpage>
+      </template>
+    </settings-animated-pages>
+  </template>
+  <template is="dom-if" if="[[showImportDataDialog_]]" restamp>
+    <settings-import-data-dialog prefs="{{prefs}}"
+        on-close="onImportDataDialogClosed_">
+    </settings-import-data-dialog>
+  </template>
+  <script src="appearance_page.js"></script>
+</dom-module>

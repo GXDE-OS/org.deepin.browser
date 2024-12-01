@@ -1,0 +1,307 @@
+<link rel="import" href="chrome://resources/html/polymer.html">
+
+<link rel="import" href="chrome://resources/cr_elements/cr_button/cr_button.html">
+<link rel="import" href="chrome://resources/cr_elements/cr_dialog/cr_dialog.html">
+<link rel="import" href="chrome://resources/cr_elements/cr_input/cr_input.html">
+<link rel="import" href="chrome://resources/cr_elements/shared_style_css.html">
+<link rel="import" href="chrome://resources/cr_elements/shared_vars_css.html">
+<link rel="import" href="chrome://resources/html/assert.html">
+<link rel="import" href="chrome://resources/html/cr.html">
+<link rel="import" href="chrome://resources/html/i18n_behavior.html">
+<link rel="import" href="chrome://resources/cr_elements/md_select_css.html">
+<link rel="import" href="../settings_shared_css.html">
+<link rel="import" href="../settings_vars_css.html">
+<link rel="import" href="../controls/settings_textarea.html">
+
+<dom-module id="settings-address-edit-dialog">
+  <template>
+    <style include="cr-shared-style settings-shared md-select">
+      :host {
+        white-space: nowrap;
+      }
+      cr-dialog {
+        --cr-my-container-overflow: auto;
+        --cr-my-dialog-width:460px;
+      }
+      .address-row {
+        display: flex;
+      }
+
+      .address-column {
+        margin-inline-end: 16px;
+        width: calc((var(--settings-input-max-width) - 16px) / 2);
+      }
+
+      #select-row {
+        display: block;
+        /* Fix issue with focus animation making labels wiggle. */
+        transform: translate3d(0, 0, 0);
+      }
+
+      .md-select {
+        --md-select-width: var(--settings-input-max-width);
+      }
+      .md-select {
+        position: relative;
+        box-sizing: border-box;
+        padding-bottom: 10px;
+        padding-top: 10px;
+      }
+      .select-value {
+        line-height: 1;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+      .select-value input {
+        border: none;
+        padding: 0;
+        background: transparent;
+        font-size: 100%;
+        color: var(--cr-toolbar-search-field-prompt-color);
+        outline: none;
+        cursor: pointer;
+      }
+      .select-ul {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        padding: 9px 0px;
+        border-radius: 18px;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        margin: 0px;
+        box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.2);
+        z-index: 9;
+        display: none;
+        max-height: 300px;
+        overflow: auto;
+        background: var(--setting-dropdown-background);
+        background-size: 100% 100%;
+        width: 100%;
+      }
+      .select-ul::-webkit-scrollbar {
+        width: 6px;
+        border-radius: 18px;
+        background-color: var(--setting-dropdown-background);
+      }
+      .select-ul::-webkit-scrollbar-thumb {
+        background-color: var(--setting-scrollbar-background-color);
+        border: 1px solid var(--setting-menu-hover-background-color);
+        border-radius: 4px;
+      }
+      .select-ul>button {
+        width: 100%;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 32px;
+        line-height: 1;
+        font-weight: 500;
+        text-align: left;
+        color: var(--setting-dropdown-font-color);
+        list-style: none;
+        box-sizing: border-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-bottom: 1px;
+        outline: none;
+        border: none;
+        display: block;
+        cursor: pointer;
+        font-size: 100%;
+        background-color: transparent;
+      }
+      .select-ul>button.select {
+        background-image: var(--setting-dropdown-checked-icon);
+        background-repeat: no-repeat;
+        background-size: 15px 13px;
+        background-position: 11px center;
+      }
+      .select-ul>button.item:hover {
+        color: #fff;
+        background-color: var(--cr-sidebar-active-background-color);
+        box-shadow: 0px 4px 6px 0px var(--cr-sidebar-active-box-shadow); 
+      }
+      .select-ul>button.select:hover {
+        background-image: url(chrome://theme/MENUITEM_SELECT_HOVER);
+        color: #fff;
+        background-color: var(--cr-sidebar-active-background-color);
+        box-shadow: 0px 4px 6px 0px var(--cr-sidebar-active-box-shadow);
+      }
+
+      .long {
+        width: var(--settings-input-max-width);
+      }
+
+      cr-input {
+        --cr-input-error-display: none;
+        --cr-margin-bottom:8px;
+      }
+
+      cr-input:not(.last-row),
+      settings-textarea,
+      .md-select {
+        margin-bottom: var(--cr-form-field-bottom-spacing);
+      }
+
+      #dialog::part(body-container) {
+        max-height: 450px;
+      }
+
+      @media all and (max-height: 714px) {
+        #dialog::part(body-container) {
+          max-height: 270px;
+        }
+      }
+      .set-head{
+        display: flex;
+        height: 48px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 10px;
+      }
+      .set-head .msg-icon{
+        width: 32px;
+        height: 32px;
+        /* background: url(chrome://resources/images/deepin_cloudprint_config_helper.svg) no-repeat center; */
+        background-size: contain;
+      }
+      .set-head .close-icon{
+        width: 22px;
+        height: 22px;
+        background: var(--cr-my-dialog-close-normal) no-repeat center;
+        background-size: 11px;
+        margin: 0px 4px;
+      }
+      .ms-title{
+       line-height: 1.43;
+       padding: 0;
+       text-align: center;
+       font-weight: 500;
+       margin-bottom: 10px;
+       color: var(--cr-my-dialog-title-color);
+       padding-top: 13px;
+     }
+     .ms-body{
+       padding-top: 10px;
+       padding-bottom: 10px;
+       overflow: auto;
+     }
+      .ms-body::-webkit-scrollbar {
+        width: 6px;
+        background-color: var(--setting-dropdown-background);
+      }
+      .ms-body::-webkit-scrollbar-thumb {
+        background-color: var(--setting-scrollbar-background-color);
+        border: 1px solid var(--setting-menu-hover-background-color);
+        border-radius: 4px;
+      }
+     .footer-btn {
+       padding: 0 20px;
+       margin-bottom: 10px;
+       margin-top: 10px;
+       justify-content: space-between;
+       padding-bottom: 0;
+       padding-top: 0;
+       align-items: center;
+     }
+    .footer-btn cr-button{
+      width: 198px;
+      height: 36px;
+      font-weight: 500;
+      border-radius: 8px; 
+    }
+    .cancel-button{
+      background: var(--cr-my-dialog-cancel-btn);
+      border: 1px solid var(--cr-my-dialog-cancel-btn-border-color);
+      border-radius: 8px;
+      box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.05); 
+      color: var(--cr-input-font-color);
+      margin-right: 0;
+    }
+    .action-button{
+      background: var(--cr-my-dialog-save-btn);
+      border: 1px solid rgba(0,0,0,0.03);
+      border-radius: 8px;
+      box-shadow: 0px 4px 4px 0px var(--cr-my-dialog-save-btn-box-shadow);
+      color: #ffffff;
+    }
+    .action-button[aria-disabled='true']{
+        opacity: 0.4;
+     }
+    .line{
+      width: 1px;
+      height: 28px;
+      background: var(--cr-my-dialog-line-color);
+    }
+    </style>
+    <cr-dialog id="dialog" close-text="$i18n{close}">
+      <div slot="setting" class="set-head">
+        <div class="msg-icon"></div>
+        <div slot="title" class="ms-title">[[title_]]</div>
+        <div class="close-icon" on-click="onCancelTap_"></div>
+      </div> 
+      <div slot="body" class="ms-body">
+        <template is="dom-repeat" items="[[addressWrapper_]]">
+          <div class="address-row">
+            <template is="dom-repeat" items="[[item]]">
+              <template is="dom-if" if="[[item.isTextArea]]">
+                <settings-textarea label="[[item.component.fieldName]]"
+                    value="{{item.value}}" on-value-changed="updateCanSave_"
+                    class$="address-column [[long_(item)]]" autofocus
+                    spellcheck="false" maxlength="1000">
+                </settings-textarea>
+              </template>
+              <template is="dom-if" if="[[!item.isTextArea]]">
+                <cr-input type="text" label="[[item.component.fieldName]]"
+                    autofocus value="{{item.value}}" spellcheck="false"
+                    on-value-changed="updateCanSave_" maxlength="1000"
+                    class$="address-column [[long_(item)]]">
+                </cr-input>
+              </template>
+            </template>
+          </div>
+        </template>
+        <div id="select-row" class="address-row">
+          <label id="select-label" class="cr-form-field-label">
+            $i18n{addressCountry}
+          </label>
+          <div class="md-select" aria-labelledby="select-label"
+            on-click="showOption">
+            <div class="select-value"><input type="submit" value="[[countryName_]]"></div>
+            <ul class="select-ul">
+              <template is="dom-repeat" items="[[countries_]]">
+                <button 
+                class$="[[showSelect(countryCode_,item.countryCode)]]"
+                disabled="[[isDivision_(item)]]"
+                on-click="selectClick">[[getName_(item)]]</button>
+              </template>
+            </ul>
+          </div>
+        </div>
+        <div class="address-row">
+          <cr-input id="phoneInput" type="text" label="$i18n{addressPhone}"
+              class="address-column last-row" on-value-changed="updateCanSave_"
+              value="{{phoneNumber_}}" spellcheck="false" maxlength="1000">
+          </cr-input>
+          <cr-input id="emailInput" type="text" label="$i18n{addressEmail}"
+              on-value-changed="updateCanSave_" value="{{email_}}"
+              class="address-column long last-row" spellcheck="false"
+              maxlength="1000">
+          </cr-input>
+        </div>
+      </div>
+      <div slot="button-container" class="footer-btn">
+        <cr-button id="cancelButton" class="cancel-button"
+            on-click="onCancelTap_">
+          $i18n{cancel}
+        </cr-button>
+        <div class="line"></div>
+        <cr-button id="saveButton" class="action-button"
+            disabled="[[!canSave_]]" on-click="onSaveButtonTap_">
+          $i18n{save}
+        </cr-button>
+      </div>
+    </cr-dialog>
+  </template>
+  <script src="address_edit_dialog.js"></script>
+</dom-module>

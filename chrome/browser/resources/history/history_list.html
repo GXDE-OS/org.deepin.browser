@@ -1,0 +1,180 @@
+    <style include="shared-style cr-shared-style">
+      :host {
+        box-sizing: border-box;
+        display: block;
+        overflow: auto;
+      }
+      :host::-webkit-scrollbar {
+        @apply --cr-scrollbar;
+      }
+      :host::-webkit-scrollbar-thumb {
+        @apply --cr-scrollbar-thumb;
+      }
+      iron-list {
+        @apply --card-sizing;
+      }
+      #infinite-list{
+        max-width: 1000px;
+        box-sizing: border-box;
+        margin: 0 auto;
+        height: 100%;
+        padding: 0;
+        background-color: var(--cr-iron-background-color);
+      }
+
+      dialog [slot=body] {
+        white-space: pre-wrap;
+      }
+      .title {
+        text-align: center;
+        font-weight: 500;
+        text-align: center;
+        color: var(--cr-my-dialog-title-color);
+      }
+      div[slot=button-container] {
+        justify-content:center;
+        padding-top: 20px;
+        padding-bottom: 10px;
+        padding-inline-end: 10px;
+        padding-inline-start: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      div[slot=body] {
+        padding: 0 10px;
+        font-weight: Normal;
+        text-align: center;
+        color: var(--cr-my-dialog-tips-color);
+        line-height: 20px;
+      }
+      div[slot=title] {
+        text-align: center;
+        font-weight: 500;
+        color: var(--cr-my-dialog-title-color);
+        line-height: 1.4286;
+        padding: 0;
+      }
+      cr-button {
+        width: 170px;
+        height: 36px;
+        font-weight: 500;
+      }
+      cr-button.cancel-button {
+        color: var(--cr-toolbar-search-field-prompt-color);
+        background: var(--cr-my-dialog-cancel-btn);
+        border: 1px solid var(--cr-my-dialog-cancel-btn-border-color);
+        border-radius: 8px;
+        box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.05); 
+        position: relative;
+        margin-right: 0;
+      }
+      .line {
+        width: 1px;
+        height: 28px;
+        background: var(--cr-my-dialog-line-color);
+      }
+      cr-button.action-button {
+        color: #ff5736;
+        background: var(--cr-my-dialog-cancel-btn);
+        border: 1px solid var(--cr-my-dialog-cancel-btn-border-color);
+        border-radius: 8px;
+        box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.05); 
+      }
+      .set-head{
+        display: flex;
+        height: 48px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 10px;
+        padding-right: 0;
+      }
+      .set-head .msg-icon{
+        width: 32px;
+        height: 32px;
+        background: url(chrome://resources/images/deepin_cloudprint_config_helper.svg) no-repeat center;
+        background-size: contain;
+      }
+      .set-head .close-icon{
+        width: 50px;
+        height: 50px;
+        background: var(--cr-my-dialog-close-normal) no-repeat center;
+        background-size: 11px;
+        margin: 0px;
+      }
+      .set-head .close-icon:hover {
+        background-color: rgba(0,0,0,0.05);
+        background-image: var(--cr-my-dialog-close-hover);
+      }
+      .set-head .close-icon:active {
+        background-color: rgba(0,0,0,0.05);
+        background-image: var(--cr-my-dialog-close-press);
+      }
+    </style>
+    <div id="no-results" class="centered-message"
+        hidden$="[[hasResults_(historyData_.length)]]">
+      <div class="message-content">[[noResultsMessage_(searchedTerm)]]</div>
+    </div>
+    <iron-list items="[[historyData_]]" as="item" id="infinite-list"
+        role="grid" aria-rowcount$="[[historyData_.length]]"
+        hidden$="[[!hasResults_(historyData_.length)]]" preserve-focus>
+      <template>
+        <history-item tabindex$="[[tabIndex]]"
+            item="[[item]]"
+            selected="[[item.selected]]"
+            is-card-start="[[isCardStart_(item, index, historyData_.length)]]"
+            is-card-end="[[isCardEnd_(item, index, historyData_.length)]]"
+            has-time-gap="[[needsTimeGap_(item, index, historyData_.length)]]"
+            search-term="[[searchedTerm]]"
+            number-of-items="[[historyData_.length]]"
+            index="[[index]]"
+            focus-row-index="[[index]]"
+            iron-list-tab-index="[[tabIndex]]"
+            last-focused="{{lastFocused_}}"
+            list-blurred="{{listBlurred_}}">
+        </history-item>
+      </template>
+    </iron-list>
+    <iron-scroll-threshold id="scroll-threshold" scroll-target="infinite-list"
+        lower-threshold="500" on-lower-threshold="onScrollToBottom_">
+    </iron-scroll-threshold>
+
+    <cr-lazy-render id="dialog">
+      <template>
+        <cr-dialog consume-keydown-event>
+          <div slot="setting" class="set-head">
+            <div class="msg-icon"></div>
+            <div class="close-icon" on-click="onDialogCancelTap_"></div>
+          </div>
+          <div slot="title">$i18n{removeSelected}</div>
+          <div slot="body">$i18n{deleteWarning}</div>
+          <div slot="button-container">
+            <cr-button class="cancel-button" on-click="onDialogCancelTap_">
+              $i18n{cancel}
+            </cr-button>
+            <div class="line"></div>
+            <cr-button class="action-button" on-click="onDialogConfirmTap_">
+              $i18n{deleteConfirm}
+            </cr-button>
+          </div>
+        </cr-dialog>
+      </template>
+    </cr-lazy-render>
+
+    <cr-lazy-render id="sharedMenu">
+      <template>
+        <cr-action-menu role-description="$i18n{actionMenuDescription}">
+          <button id="menuMoreButton" class="dropdown-item"
+              hidden="[[!canSearchMoreFromSite_(
+                  searchedTerm, actionMenuModel_.item.domain)]]"
+              on-click="onMoreFromSiteTap_">
+            $i18n{moreFromSite}
+          </button>
+          <button id="menuRemoveButton" class="dropdown-item"
+              hidden="[[!canDeleteHistory_]]" disabled="[[pendingDelete]]"
+              on-click="onRemoveFromHistoryTap_">
+            $i18n{removeFromHistory}
+          </button>
+        </cr-action-menu>
+      </template>
+    </cr-lazy-render>

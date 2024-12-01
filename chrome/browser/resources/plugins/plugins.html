@@ -1,0 +1,428 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>插件</title>
+<link rel="stylesheet" href="chrome://resources/css/text_defaults.css">
+<style>/* Copyright (c) 2012 The Chromium Authors. All rights reserved.
+ * Use of this source code is governed by a BSD-style license that can be
+ * found in the LICENSE file. */
+
+body {
+  margin: 10px;
+  min-width: 47em;
+}
+
+a {
+  color: blue;
+  font-size: 103%;
+}
+
+#header {
+  -webkit-padding-start: 0;
+  background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgZmlsbD0iIzYyNjI2MiI+PHBhdGggZD0iTTAgMGg0OHY0OEgweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik00MSAyMmgtM3YtOGMwLTIuMjEtMS43OS00LTQtNGgtOFY3YzAtMi43Ni0yLjI0LTUtNS01cy01IDIuMjQtNSA1djNIOGMtMi4yMSAwLTMuOTggMS43OS0zLjk4IDRsLS4wMSA3LjZIN2MyLjk4IDAgNS40IDIuNDIgNS40IDUuNFM5Ljk4IDMyLjQgNyAzMi40SDQuMDFMNCA0MGMwIDIuMjEgMS43OSA0IDQgNGg3LjZ2LTNjMC0yLjk4IDIuNDItNS40IDUuNC01LjQgMi45OCAwIDUuNCAyLjQyIDUuNCA1LjR2M0gzNGMyLjIxIDAgNC0xLjc5IDQtNHYtOGgzYzIuNzYgMCA1LTIuMjQgNS01cy0yLjI0LTUtNS01eiIvPjwvc3ZnPg==)
+      left center / 48px no-repeat;
+  box-sizing: border-box;
+  margin-bottom: 1.05em;
+  overflow: hidden;
+  position: relative;
+}
+
+html[dir=rtl] #header {
+  background-position-x: right;
+}
+
+#header h1 {
+  -webkit-padding-start: 51px;
+  line-height: 48px;
+}
+
+h1 {
+  font-size: 156%;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}
+
+#disabled-container {
+  font-size: 120%;
+  padding-bottom: 1.5em;
+}
+
+#disabled-header {
+  color: red;
+  font-weight: bold;
+}
+
+div.content {
+  margin-top: 5px;
+}
+
+.section-header {
+  -webkit-padding-start: 5px;
+  background: rgb(235, 239, 249);
+  border-top: 1px solid rgb(181, 199, 222);
+  font-size: 99%;
+  padding-bottom: 2px;
+  padding-top: 3px;
+  width: 100%;
+}
+
+.section-header > table tr td:first-child {
+  width: 100%;
+}
+
+.section-header > table {
+  width: 100%;
+}
+
+.section-header-title {
+  font-weight: bold;
+}
+
+.vbox-container {
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+}
+
+.wbox {
+  -webkit-box-align: stretch;
+  -webkit-box-flex: 1;
+  display: -webkit-box;
+}
+
+#top {
+  -webkit-padding-end: 5px;
+}
+
+.show-in-tmi-mode {
+  overflow: hidden;
+}
+
+body.hide-tmi-mode-initial .show-in-tmi-mode {
+  height: 0 !important;
+  opacity: 0;
+}
+
+body.hide-tmi-mode .show-in-tmi-mode {
+  -webkit-transition: all 100ms ease-out;
+  height: 0 !important;
+  opacity: 0;
+}
+
+body.show-tmi-mode-initial .show-in-tmi-mode {
+  opacity: 1;
+}
+
+body.show-tmi-mode .show-in-tmi-mode {
+  -webkit-transition: all 100ms ease-in;
+  opacity: 1;
+}
+
+.wbox-tmi-mode {
+  -webkit-box-align: stretch;
+  -webkit-box-flex: 1;
+}
+
+.tmi-mode-image {
+  margin-top: 2px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.tmi-mode-link {
+  margin-right: 3px;
+  white-space: nowrap;
+}
+
+.tmi-mode-link a {
+  font-size: 97%;
+}
+
+.tmi-mode {
+  -webkit-padding-start: 10px;
+  background: rgb(244, 246, 252);
+  border-bottom: 1px solid rgb(237, 239, 245);
+  font-size: 89%;
+  padding-bottom: 0.8em;
+  padding-top: 0.8em;
+  width: 100%;
+}
+
+.plugin-disabled {
+  background-color: #f0f0f0;
+  color: #a0a0a0;
+}
+
+.plugin > tr > td {
+  padding-bottom: 4px;
+  padding-top: 5px;
+}
+
+.plugin-file {
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+
+.plugin {
+  border-bottom: 1px solid #cdcdcd;
+}
+
+.critical {
+  color: red;
+}
+
+/* Indent the text related to each plug-in. */
+.plugin-text {
+  -webkit-padding-start: 5px;
+}
+
+.plugin-name {
+  font-weight: bold;
+}
+
+.no-plugins {
+  font-size: 1.2em;
+  margin: 6em 0 0;
+  text-align: center;
+}
+
+/* Use tables for layout, so eliminate extra spacing. */
+.plugin-details table {
+  -webkit-border-horizontal-spacing: 0;
+  -webkit-border-vertical-spacing: 0;
+}
+
+.plugin-details {
+  -webkit-padding-start: 1em;
+}
+
+/* Separate the inital line, Description, Location, and MIME Types lines. */
+.plugin-details > div {
+  padding-top: 0.1em
+}
+
+/* Align rows of tables along the top. */
+.plugin-details tr {
+  vertical-align: top;
+}
+
+/* Separate columns by 1em for the most part. */
+.plugin-details td+td {
+  -webkit-padding-start: 1em;
+}
+
+/* Make the MIME Types tables smaller. */
+.plugin-details .mime-types {
+  font-size: 95%;
+}
+
+/* Separate the header from the contents in each MIME Types table. */
+.plugin-details .mime-types .header td {
+  border-bottom: 1px solid black;
+  padding-bottom: 0.1em;
+}
+
+/* Separate the columns for tables used for horizontal listings only a bit. */
+.hlisting td+td {
+  -webkit-padding-start: 0.4em;
+}
+
+/* Match the indentation of .plugin-text. */
+.plugin-actions {
+  -webkit-padding-start: 5px;
+  margin-bottom: 0.2em;
+  margin-top: 0.2em;
+}
+
+.always-allow {
+  -webkit-margin-start: 30px;
+}
+
+button {
+  font-size: 104%;
+}
+</style>
+<script src="chrome://resources/js/mojo_bindings.js"></script>
+<script src="chrome/browser/ui/webui/plugins/plugins.mojom.js"></script>
+<script src="plugins.js"></script>
+
+</head>
+<body>
+<div id="body-container" style="visibility:hidden">
+
+  <div id="header"><h1>插件</h1></div>
+
+  <div id="pluginTemplate">
+
+    <div id="container" class="vbox-container">
+    <div id="top" class="wbox">
+
+      <div class="section-header">
+        <table cellpadding="0" cellspacing="0"><tr valign="center">
+          <td>
+            <span class="section-header-title">插件</span>
+            <span class="section-header-title"
+                  jsdisplay="plugins.length > 0">(<span
+                  jscontent="plugins.length"></span>)</span>
+          </td>
+          <td width="18">
+            <img id="collapse" class="tmi-mode-image" style="display:none"
+                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAArUlEQVR4Xo3RSwrCMBAG4FzSK7j2Bh7EtUsv4A3E0CISTXy1Fktbah+hlkRJ0IHMoouWGn5+huRbTUhevRdLfzJd9QaeABAnvgMH3Gy+Jh0x6EaQtXYEGWO01oiU/hBCe1PLBlHTqiH0LGtEZf2qZCsb5doFLvNCplmBKMmKbtKshI6TPHqkYZQgugSxON/5KXQNOYrgIG6MX2EAgMv0d3zrsQ3dd0M9hsv851t+LjY7xth5rcEAAAAASUVORK5CYII=">
+            <img id="expand" class="tmi-mode-image"
+                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAsUlEQVR4Xo3RTQ6CMBCA0V7SK7j2Bh7EtUsv4A2MBGIMCv6BRNKSWqBBQjVtdMx0YVCCzbeYdN6qJby4T6beYDj7GawAEBTPjgNuNJ6TliDEgVquBxljepDWWillUaMeuPuulJVFVd10oWteWpSXt0LWsmogFDDAJReSZcIimgmMZTkimFPKkwuLE2rRIUrD/TnYxRCibRhtwpMfHGEAYB/TWwVL1184688c18fH/OtbXhLUIxe+s0R/AAAAAElFTkSuQmCC">
+          </td>
+          <td>
+            <div class="tmi-mode-link">
+              <a id="details-link" style="cursor: default">详细信息</a>
+            </div>
+          </td>
+        </tr></table>
+      </div>
+
+    </div>
+    </div>
+
+    <div class="content">
+      <div class="plugin-name no-plugins" jsdisplay="plugins.length === 0">
+        <div>No plugins are installed</div>
+      </div>
+
+      <div jsdisplay="plugins.length > 0">
+      <div class="plugin" jsselect="plugins">
+        <table width="100%" cellpadding="2" cellspacing="0">
+        <tr jsvalues=
+            ".className:isPluginEnabled($this) ? 'plugin-enabled' : 'plugin-disabled'">
+        <td valign="top">
+          <div class="plugin-text">
+            <div>
+              <span class="plugin-name" dir="ltr"
+                    jscontent="name">NAME</span>
+              <span jsdisplay="pluginFiles.length > 1"
+                  jscontent="'(' + pluginFiles.length +' files)'">(x)</span>
+              <span jsdisplay="shouldDisplayPluginVersion($this)">
+                - <span>版本：</span>
+                <span jsvalues=".className:critical? 'critical': ''"
+                    dir="ltr" jscontent="version">x.x.x.x</span>
+              </span>
+              <a jsdisplay="critical" jsvalues=".href:updateUrl">Download Critical Security Update</a>
+              <span jsdisplay="enabledMode == 'disabledByUser'">（已停用）</span>
+              <span jsdisplay="enabledMode == 'disabledByPolicy'">(Disabled by enterprise policy)</span>
+              <span jsdisplay="enabledMode == 'enabledByPolicy'">(Enabled by enterprise policy)</span>
+              <span jsdisplay="enabledMode == 'managedByPolicy'">(Managed by enterprise policy)</span>
+              <div jsdisplay="shouldDisplayPluginDescription($this)">
+                <span dir="ltr" jsvalues=".innerHTML:description">
+              </div>
+            </div>
+            <div jsselect="pluginFiles" class="plugin-details">
+              <div class="show-in-tmi-mode plugin-file">
+                <div jsvalues=
+                  ".className:isPluginEnabled($this) ? 'plugin-enabled' : 'plugin-disabled'">
+                  <div><table><tr>
+                    <td class="plugin-details-label">名字：</td>
+                    <td><span dir="ltr" jscontent="name">NAME</span></td>
+                  </tr></table></div>
+                  <div><table>
+                    <tr jsdisplay="shouldDisplayPluginDescription($this)">
+                      <td class="plugin-details-label">说明：</td>
+                      <td>
+                        <span dir="ltr" jsvalues=".innerHTML:description">
+                      </td>
+                    </tr>
+                  </table></div>
+                  <div><table><tr>
+                    <td class="plugin-details-label">版本：</td>
+                    <td><span dir="ltr" jscontent="version">x.x.x.x</span></td>
+                  </tr></table></div>
+                  <div><table><tr>
+                    <td class="plugin-details-label">Location:</td>
+                    <td><span dir="ltr" jscontent="path"></span></td>
+                  </tr></table></div>
+                  <div><table><tr>
+                    <td class="plugin-details-label">Type:</td>
+                    <td><span dir="ltr" jscontent="type"></span></td>
+                  </tr></table></div>
+                  <div><table><tr>
+                    <td class="plugin-details-label">&nbsp;</td>
+                    <td>
+                      <span jsdisplay="enabledMode == 'disabledByPolicy'">(Disabled by enterprise policy)</span>
+                      <span jsdisplay="enabledMode == 'enabledByPolicy'">(Enabled by enterprise policy)</span>
+                      <span guest-visibility="disabled">
+                        <a class="disable-plugin-link"
+                           jsvalues=".path:path"
+                           jsdisplay="enabledMode == 'enabledByUser'"
+                           href="#">停用</a>
+                        <a class="enable-plugin-link"
+                           jsvalues=".path:path"
+                           jsdisplay="enabledMode == 'disabledByUser'"
+                           href="#">启用</a>
+                      </span>
+                    </td>
+                  </tr></table></div>
+                  <table><tr jsdisplay="mimeTypes.length > 0">
+                    <td class="plugin-details-label">MIME types:</td>
+                    <td><table width="100%" class="mime-types">
+                      <tr class="header">
+                        <td>
+                          MIME type
+                        </td>
+                        <td>
+                          说明
+                        </td>
+                        <td>
+                          File extensions
+                        </td>
+                      </tr>
+                      <tr jsselect="mimeTypes">
+                        <td><span dir="ltr"
+                                  jscontent="mimeType"></span></td>
+                        <td><span dir="ltr"
+                                  jsvalues=".innerHTML:description"></span></td>
+                        <td><table jsdisplay="fileExtensions.length > 0"
+                                   class="hlisting">
+                          <tr><td jsselect="fileExtensions">
+                            <span dir="ltr" jscontent="'.' + $this">
+                          </td></tr>
+                        </table></td>
+                      </tr>
+                    </table></td>
+                  </tr></table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="plugin-actions" guest-visibility="disabled">
+            <span>
+              <a class="disable-group-link"
+                 jsvalues=".path:name"
+                 jsdisplay="enabledMode == 'enabledByUser'"
+                 href="#">停用</a>
+              <a class="enable-group-link"
+                 jsvalues=".path:name"
+                 jsdisplay="enabledMode == 'disabledByUser'"
+                 href="#">启用</a>
+            </span>
+            <input
+                class="always-allow" type="checkbox"
+                jsvalues=
+                    ".identifier:id; id:id + '-always-allowed'; .checked:alwaysAllowed; disabled:isPluginTrusted($this) || !isPluginEnabled($this) || isPluginPolicyClickToPlay($this)">
+            <label jsvalues="for:id + '-always-allowed'">始终允许运行</label>
+          </div>
+        </td>
+        </tr>
+        </table>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="chrome://resources/js/util.js"></script>
+<script src="chrome://resources/js/cr.js"></script>
+<script src="chrome://plugins/plugins.js"></script>
+
+
+<script src="chrome://resources/js/load_time_data.js"></script>
+<script src="chrome://resources/js/jstemplate_compiled.js"></script>
+<script src="strings.js"></script>
+</body>
+</html>

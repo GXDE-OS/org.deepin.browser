@@ -1,0 +1,181 @@
+<link rel="import" href="chrome://resources/html/polymer.html">
+
+<link rel="import" href="chrome://resources/cr_elements/md_select_css.html">
+<link rel="import" href="chrome://resources/polymer/v1_0/iron-icon/iron-icon.html">
+<link rel="import" href="chrome://resources/html/assert.html">
+<link rel="import" href="chrome://resources/html/i18n_behavior.html">
+<link rel="import" href="chrome://resources/html/web_ui_listener_behavior.html">
+<link rel="import" href="../i18n_setup.html">
+<link rel="import" href="../route.html">
+<link rel="import" href="../settings_shared_css.html">
+<link rel="import" href="../settings_vars_css.html">
+<link rel="import" href="constants.html">
+<link rel="import" href="site_settings_behavior.html">
+<link rel="import" href="site_settings_prefs_browser_proxy.html">
+
+<!-- `site-details-permission` does not include any icon-set, so containing
+     elements should import the icon-set needed for the specified |icon|. -->
+<dom-module id="site-details-permission">
+  <template>
+    <style include="settings-shared md-select">
+      #details{
+        padding:0 20px;
+        border-bottom: 1px solid var(--setting-link-row-border-color);
+      }
+      .list-item{
+        height: 100%;
+        color: var(--cr-toolbar-search-field-prompt-color);
+        min-height: auto;
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+      .md-select {
+        position: relative;
+        box-sizing: border-box;
+      }
+      .select-ul {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 9px 0px;
+        border-radius: 18px;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        margin: 0px;
+        box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.2);
+        z-index: 9;
+        display: none;
+        max-height: 300px;
+        overflow: auto;
+        background: var(--setting-dropdown-background);
+        background-size: 100% 100%;
+      }
+      .select-ul::-webkit-scrollbar {
+        width: 6px;
+        border-radius: 18px;
+        background-color: var(--setting-dropdown-background);
+      }
+      .select-ul::-webkit-scrollbar-thumb {
+        background-color: var(--setting-scrollbar-background-color);
+        border: 1px solid var(--setting-menu-hover-background-color);
+        border-radius: 4px;
+      }
+      .select-ul>li {
+        width: 210px;
+        font-weight: 500;
+        text-align: left;
+        color: var(--setting-dropdown-font-color);
+        list-style: none;
+        box-sizing: border-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-bottom: 1px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 32px;
+        line-height: 1;
+      }
+      .select-ul>li.select {
+        background-image: var(--setting-dropdown-checked-icon);
+        background-repeat: no-repeat;
+        background-size: 15px 13px;
+        background-position: 11px 11px;
+      }
+      .select-ul>li:hover {
+        color: #fff;
+        background-color: var(--cr-sidebar-active-background-color);
+        box-shadow: 0px 4px 6px 0px var(--cr-sidebar-active-box-shadow);
+      }
+      .select-ul>li.select:hover {
+        background-image: url(chrome://theme/MENUITEM_SELECT_HOVER);
+      }
+      .select-value {
+        overflow: hidden;
+        white-space: nowrap;
+      }
+    </style>
+    <div id="details" hidden$="[[shouldHideCategory_(category)]]">
+      <div id="permissionItem"
+          class$="list-item [[permissionInfoStringClass_(site.source, category,
+                                                         site.setting)]]">
+        <div>
+          <iron-icon icon="[[icon]]">
+          </iron-icon>
+        </div>
+        <div class="middle" id="permissionHeader" aria-hidden="true">
+          [[label]]
+          <!-- <div class="secondary" id="permissionSecondary"
+              hidden$="[[!hasPermissionInfoString_(site.source, category,
+                                                   site.setting)]]"
+              inner-h-t-m-l="[[permissionInfoString_(
+                site.source,
+                category,
+                site.setting,
+                '$i18nPolymer{siteSettingsAdsBlockBlacklistedSingular}',
+                '$i18nPolymer{siteSettingsAdsBlockNotBlacklistedSingular}',
+                '$i18nPolymer{siteSettingsSourceEmbargo}',
+                '$i18nPolymer{siteSettingsSourceInsecureOrigin}',
+                '$i18nPolymer{siteSettingsSourceKillSwitch}',
+                '$i18nPolymer{siteSettingsSourceExtensionAllow}',
+                '$i18nPolymer{siteSettingsSourceExtensionBlock}',
+                '$i18nPolymer{siteSettingsSourceExtensionAsk}',
+                '$i18nPolymer{siteSettingsSourcePolicyAllow}',
+                '$i18nPolymer{siteSettingsSourcePolicyBlock}',
+                '$i18nPolymer{siteSettingsSourcePolicyAsk}',
+                '$i18nPolymer{siteSettingsSourceDrmDisabled}')]]">
+          </div> -->
+        </div>
+        <div id="permission" class="md-select"
+            aria-label$="[[label]]"
+            aria-describedby="permissionSecondary"
+            on-click="showOption"
+            disabled$="[[!isPermissionUserControlled_(site.source, category,
+                                                      site.setting)]]">
+          <div class="select-value">[[selectName]]</div>
+          <ul class="select-ul">
+              <li id="default"
+                data-id$=[[ContentSetting.DEFAULT]]
+                on-click="selectClick">
+                [[defaultSettingString_(
+                  defaultSetting_,
+                  category,
+                  useAutomaticLabel)]]</li>
+              <li id="allow"
+              hidden$="[[!showAllowedSetting_(category)]]"
+              data-id$=[[ContentSetting.ALLOW]]
+              on-click="selectClick">$i18n{siteSettingsActionAllow}</li>
+              <li id="block"
+              data-id$=[[ContentSetting.BLOCK]]
+              on-click="selectClick">[[blockSettingString_(
+                category,
+                '$i18n{siteSettingsActionBlock}',
+                '$i18n{siteSettingsActionMute}')]]</li>
+              <li id="ask"
+                data-id$=[[ContentSetting.ASK]]
+                hidden$="[[!showAskSetting_(category, site.setting,site.source)]]"
+                on-click="selectClick">$i18n{siteSettingsActionAsk}</li>
+          </ul>
+          <!-- <option id="default" value$="[[ContentSetting.DEFAULT]]">
+            
+          </option>
+          <option id="allow" value$="[[ContentSetting.ALLOW]]"
+              hidden$="[[!showAllowedSetting_(category)]]">
+            $i18n{siteSettingsActionAllow}
+          </option>
+          <option id="block" value$="[[ContentSetting.BLOCK]]">
+            [[blockSettingString_(
+                category,
+                '$i18n{siteSettingsActionBlock}',
+                '$i18n{siteSettingsActionMute}')]]
+          </option>
+          <option id="ask" value$="[[ContentSetting.ASK]]"
+              hidden$="[[!showAskSetting_(category, site.setting,
+                                          site.source)]]">
+            $i18n{siteSettingsActionAsk}
+          </option> -->
+        </div>
+      </div>
+    </div>
+  </template>
+  <script src="site_details_permission.js"></script>
+</dom-module>

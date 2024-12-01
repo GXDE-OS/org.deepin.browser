@@ -1,0 +1,116 @@
+<link rel="import" href="chrome://resources/html/polymer.html">
+
+<link rel="import" href="chrome://resources/html/action_link.html">
+<link rel="import" href="chrome://resources/cr_elements/action_link_css.html">
+<link rel="import" href="chrome://resources/html/assert.html">
+<link rel="import" href="chrome://resources/html/cr/ui/focus_without_ink.html">
+<link rel="import" href="chrome://resources/polymer/v1_0/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="chrome://resources/polymer/v1_0/iron-list/iron-list.html">
+<link rel="import" href="chrome://resources/html/web_ui_listener_behavior.html">
+<link rel="import" href="chrome://resources/cr_elements/cr_scrollable_behavior.html">
+<link rel="import" href="../controls/extension_controlled_indicator.html">
+<link rel="import" href="../settings_shared_css.html">
+<link rel="import" href="startup_url_dialog.html">
+<link rel="import" href="startup_url_entry.html">
+<link rel="import" href="startup_urls_page_browser_proxy.html">
+
+<dom-module id="settings-startup-urls-page">
+  <template>
+    <style include="settings-shared action-link iron-flex">
+      .list-frame {
+        @apply --settings-list-frame-padding;
+        padding-inline-end: 0;
+        padding-inline-start:0;
+        border-radius: 0 0 8px 8px;
+        background: var(--setting-link-row-background-color);
+      }
+
+      .list-frame > div {
+        /* border-top: var(--cr-separator-line); */
+        border-top: 1px solid var(--setting-link-row-border-color);
+        padding-inline-start:20px;
+        padding-inline-end:20px;
+      }
+
+      #outer {
+        @apply --settings-list-frame-padding;
+        max-height: 360px;  /** Enough height to show six entries. */
+        padding-left: 0;
+        padding-right: 0;
+        overflow-y: auto;
+        border-radius: 8px 8px 0 0;
+      }
+      #container iron-list {
+        max-height: 360px;
+      }
+      #outer::-webkit-scrollbar {
+        width: 6px;
+        background-color: var(--setting-link-row-background-color);
+        border-radius: 0px 8px 0 0;
+      }
+      #outer::-webkit-scrollbar-thumb {
+        background-color: var(--setting-scrollbar-background-color);
+        border: 1px solid var(--setting-menu-hover-background-color);
+        border-radius: 4px;
+      }
+      #container settings-startup-url-entry {
+        cursor: default;
+        display: block;
+        transform: none !important;
+        position: relative;
+      }
+      .list-item a {
+        color: var(--cr-toolbar-search-field-prompt-color);
+      }
+      /* iron-list{
+        --cr-my-position:relative;
+      } */
+    </style>
+    <div id="outer" class="layout vertical flex">
+      <div id="container">
+        <iron-list items="[[startupPages_]]" scroll-target="container"
+            preserve-focus risk-selection>
+          <template>
+            <settings-startup-url-entry model="[[item]]" first$="[[!index]]"
+                tabindex$="[[tabIndex]]" iron-list-tab-index="[[tabIndex]]"
+                last-focused="{{lastFocused_}}" list-blurred="{{listBlurred_}}"
+                focus-row-index="[[index]]" editable="[[shouldAllowUrlsEdit_(
+                    prefs.session.startup_urls.enforcement)]]">
+            </settings-startup-url-entry>
+          </template>
+        </iron-list>
+      </div>
+    </div>
+    <div class="list-frame">
+      <template is="dom-if" if="[[shouldAllowUrlsEdit_(
+          prefs.session.startup_urls.enforcement)]]" restamp>
+        <div class="list-item" id="addPage">
+          <a is="action-link" class="list-button" on-click="onAddPageTap_">
+            $i18n{onStartupAddNewPage}
+          </a>
+        </div>
+        <div class="list-item" id="useCurrentPages">
+          <a is="action-link" class="list-button"
+              on-click="onUseCurrentPagesTap_">
+            $i18n{onStartupUseCurrent}
+          </a>
+        </div>
+      </template>
+      <template is="dom-if" if="[[prefs.session.startup_urls.extensionId]]"
+          restamp>
+        <extension-controlled-indicator
+            extension-id="[[prefs.session.startup_urls.extensionId]]"
+            extension-name="[[prefs.session.startup_urls.controlledByName]]"
+            extension-can-be-disabled="[[
+                prefs.session.startup_urls.extensionCanBeDisabled]]">
+        </extension-controlled-indicator>
+      </template>
+    </div>
+    <template is="dom-if" if="[[showStartupUrlDialog_]]" restamp>
+      <settings-startup-url-dialog model="[[startupUrlDialogModel_]]"
+          on-close="destroyUrlDialog_">
+      </settings-startup-url-dialog>
+    </template>
+  </template>
+  <script src="startup_urls_page.js"></script>
+</dom-module>

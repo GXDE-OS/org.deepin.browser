@@ -1,0 +1,70 @@
+<style include="cr-hidden-style">
+  :host {
+    align-items: center;
+    display: flex;
+    min-height: 50px;
+  }
+
+  #toolbar {
+    flex: 1;
+  }
+
+  cr-icon-button {
+    --cr-icon-button-fill-color-focus: var(--cr-toolbar-background-color);
+    justify-content: flex-end;
+    margin: 4px;
+  }
+
+  @media (prefers-color-scheme: light) {
+    cr-icon-button {
+      --cr-icon-button-fill-color: currentColor;
+    }
+  }
+  #moreActions {
+    --cr-icon-button-fill-color: var(--google-grey-refresh-700);
+    --cr-icon-button-fill-color-focus: white;
+    --cr-icon-button-icon-start-offset: 0;
+    --cr-icon-button-icon-size: 20px;
+    --cr-icon-button-size: 36px;
+    --cr-icon-button-height: var(--cr-icon-button-size);
+    --cr-icon-button-transition: 150ms ease-in-out;
+    --cr-icon-button-width: var(--cr-icon-button-size);
+    -webkit-tap-highlight-color: transparent;
+    border-radius: 4px;
+    color: var(--cr-icon-button-stroke-color, var(--cr-icon-button-fill-color));
+    cursor: pointer;
+    display: inline-flex;
+    flex-shrink: 0;
+    height: var(--cr-icon-button-height);
+    /* margin-inline-end: var(--cr-icon-button-margin-end, var(--cr-icon-ripple-margin)); */
+    margin-inline-start: var(--cr-icon-button-margin-start);
+    outline: none;
+    user-select: none;
+    vertical-align: middle;
+    /* width: var(--cr-icon-button-width); */
+    position: relative;
+    background: var(--cr-toolbar-bg-color);
+    font-size: 85.71%;
+    font-weight: 500;
+    text-align: center;
+    line-height: 36px;
+    color: #0082fa;
+    white-space: nowrap;
+  }
+</style>
+<cr-toolbar id="toolbar" page-name="$i18n{title}"
+    search-prompt="$i18n{search}" clear-label="$i18n{clearSearch}"
+    spinner-active="{{spinnerActive}}" on-search-changed="onSearchChanged_">
+  <div id="moreActions" 
+      class="dropdown-trigger" title="$i18n{more}"
+      on-click="onMoreActionsTap_" aria-haspopup="menu">$i18n{more}</div>
+</cr-toolbar>
+<cr-action-menu id="moreActionsMenu"
+    role-description="$i18n{actionMenuDescription}">
+  <button class="dropdown-item clear-all" on-click="onClearAllTap_">
+    $i18n{clearAll}
+  </button>
+  <button class="dropdown-item" on-click="onOpenDownloadsFolderTap_">
+    $i18n{openDownloadsFolder}
+  </button>
+</cr-action-menu>

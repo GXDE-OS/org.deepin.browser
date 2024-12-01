@@ -1,0 +1,53 @@
+
+<custom-style>
+<style>
+  html {
+    --card-border-color: rgba(0, 0, 0, 0.14);
+    --card-first-last-item-padding: 8px;
+    --card-max-width: 960px;
+    --card-min-width: 550px;
+    --card-padding-between: 16px;
+    --card-padding-side: 24px;
+    --first-card-padding-top: 24px;
+    --interactive-color: var(--google-blue-500);
+    --item-height: 44px;
+    --separator-color: rgba(0, 0, 0, 0.08);
+    --side-bar-width: 256px;
+    --sidebar-footer-text-color: var(--google-grey-refresh-700);
+    --sidebar-unselected-color: #5a5a5a;
+    --toolbar-height: 51px;
+    /* light start */
+    --history-item-time-color: #646464;
+    --history-list-domain-color: rgba(0, 0, 0, 0.5);
+    --history-side-bar-setting-icon: url(chrome://theme/IDR_HISTORY_CLEAR);
+    --history-list-line-color: rgba(0, 0, 0, 0.05);
+    /* light end */
+    --card-sizing: {
+      margin: 0 auto;
+      max-width: var(--card-max-width);
+      min-width: var(--card-min-width);
+      padding: 0 var(--card-padding-side);
+      width: calc(100% - 2 * var(--card-padding-side));
+    };
+  }
+
+  @media (prefers-color-scheme: dark) {
+    html {
+      --card-border-color: var(--cr-separator-color);
+      --history-item-time-color: var(--cr-secondary-text-color);
+      --interactive-color: var(--google-blue-refresh-300);
+      --separator-color: var(--cr-separator-color);
+      --sidebar-footer-text-color: rgba(255, 255, 255, 0.6);
+      --sidebar-unselected-color: var(--cr-secondary-text-color);
+    }
+  }
+
+  html .dark {
+    --history-item-time-color: #6d7c88;
+    --history-list-domain-color: rgba(255, 255, 255, 0.5);
+    --history-side-bar-setting-icon: url(chrome://theme/IDR_HISTORY_CLEAR_DARK);
+    --history-checkbox-icon: url(chrome://resources/images/checkbox_unchecked_dark.svg);
+    --history-list-line-color: rgba(255, 255, 255, 0.05);
+  }
+</style>
+</custom-style>

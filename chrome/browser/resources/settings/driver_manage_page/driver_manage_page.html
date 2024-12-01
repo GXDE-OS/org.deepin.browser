@@ -1,0 +1,70 @@
+<link rel="import" href="chrome://resources/html/polymer.html">
+
+<link rel="import" href="chrome://resources/cr_elements/cr_button/cr_button.html">
+<link rel="import" href="chrome://resources/cr_elements/shared_vars_css.html">
+<link rel="import" href="chrome://resources/html/action_link.html">
+<link rel="import" href="chrome://resources/cr_elements/action_link_css.html">
+<link rel="import" href="chrome://resources/html/assert.html">
+<link rel="import" href="chrome://resources/html/cr.html">
+<link rel="import" href="chrome://resources/html/cr/ui/focus_without_ink.html">
+<link rel="import" href="chrome://resources/html/web_ui_listener_behavior.html">
+<link rel="import" href="driver_manage_browser_proxy.html">
+<link rel="import" href="driver_manage_dialog.html">
+<link rel="import" href="driver_manage_list.html">
+<link rel="import" href="../global_scroll_target_behavior.html">
+<link rel="import" href="../route.html">
+<link rel="import" href="../settings_shared_css.html">
+<link rel="import" href="../settings_vars_css.html">
+
+<dom-module id="settings-driver-manage-page">
+  <template>
+    <style include="settings-shared action-link">
+      .extension-engines,
+      #noOtherEngines,
+      .no-search-results {
+        @apply --settings-list-frame-padding;
+        padding-left: 0;
+        color: var(--setting-passwd-nodata-label-color);
+      }
+
+      settings-omnibox-extension-entry {
+        border-top: var(--cr-separator-line);
+      }
+      .settings-box{
+        background: none;
+        padding-left: 0;
+      }
+      .settings-box h2{
+        color: var(--cr-toolbar-font-color);
+        font-weight: 500;
+        padding-top: 20px;
+        padding-bottom: 10px;
+      }
+      cr-button{
+        border: none;
+        --hover-bg-color:inherit;
+        --active-bg:none;
+        --active-shadow-rgb:rgba(0,0,0,0);
+        --paper-ripple-width:0;
+        padding: 0;
+        min-width: 0;
+        box-shadow: none;
+      }
+    </style>
+    <div class="settings-box first">
+      <!-- <h2>$i18n{searchEnginesDefault}</h2> -->
+      <h2 class="start">$i18n{usbkeydriverManagerDriverLoadedLabel}</h2>
+      <cr-button class="secondary-button header-aligned-button"
+          on-click="onAddSearchEngineTap_" id="addSearchEngine">
+        $i18n{add}
+      </cr-button>
+    </div>
+    <settings-driver-manage-list driver=[[drivers]]></settings-driver-manage-list>
+    <template is="dom-if" if="[[showDialog_]]" restamp>
+      <settings-driver-manage-dialog model="[[dialogModel_]]"
+          on-close="onCloseDialog_" prefs="{{prefs}}">
+      </settings-driver-manage-dialog>
+    </template>
+  </template>
+  <script src="driver_manage_page.js"></script>
+</dom-module>

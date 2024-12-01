@@ -1,0 +1,449 @@
+<link rel="import" href="chrome://resources/html/polymer.html">
+
+<link rel="import" href="chrome://resources/cr_elements/cr_button/cr_button.html">
+<link rel="import" href="chrome://resources/cr_elements/cr_dialog/cr_dialog.html">
+<link rel="import" href="chrome://resources/cr_elements/cr_lazy_render/cr_lazy_render.html">
+<link rel="import" href="chrome://resources/cr_elements/cr_search_field/cr_search_field.html">
+<link rel="import" href="chrome://resources/cr_elements/shared_vars_css.html">
+<link rel="import" href="chrome://resources/cr_elements/md_select_css.html">
+<link rel="import" href="chrome://resources/html/web_ui_listener_behavior.html">
+<link rel="import" href="chrome://resources/html/i18n_behavior.html">
+<link rel="import" href="chrome://resources/polymer/v1_0/iron-icon/iron-icon.html">
+<link rel="import" href="chrome://resources/polymer/v1_0/iron-list/iron-list.html">
+<link rel="import" href="../global_scroll_target_behavior.html">
+<link rel="import" href="../i18n_setup.html">
+<link rel="import" href="../route.html">
+<link rel="import" href="../router.html">
+<link rel="import" href="../settings_shared_css.html">
+<link rel="import" href="all_sites_icons.html">
+<link rel="import" href="clear_storage_dialog_css.html">
+<link rel="import" href="constants.html">
+<link rel="import" href="local_data_browser_proxy.html">
+<link rel="import" href="site_entry.html">
+<link rel="import" href="site_settings_behavior.html">
+<link rel="import" href="site_settings_prefs_browser_proxy.html">
+
+<dom-module id="all-sites">
+  <template>
+    <style include="settings-shared md-select clear-storage-dialog-shared">
+      #sort {
+        align-items: center;
+        display: flex;
+        margin: 0;
+        margin-bottom: 20px;
+        color: var(--cr-toolbar-search-field-prompt-color)
+      }
+
+      #sortMethod {
+        margin-inline-start: 1em;
+      }
+
+      /* There is only one top-level heading for All Sites, so remove the
+       * additional leading padding used for lists. */
+      .list-frame.without-heading {
+        padding-inline-start: var(--cr-section-padding);
+      }
+
+      #clearAllContainer {
+        align-items: center;
+        display: flex;
+        height: var(--cr-section-two-line-min-height);
+        justify-content: space-between;
+        margin: 0 var(--cr-icon-button-margin-start);
+        padding-inline-end: var(--cr-section-padding);
+        padding-inline-start: var(--cr-section-padding);
+      }
+      .no-data {
+        color: var(--setting-passwd-nodata-label-color) !important;
+      }
+      .md-select{
+        width: 240px;
+        background-color: var(--cr-input-show-background-color);
+        border-radius: 8px;
+        box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.05);
+        color: var(--cr-toolbar-search-field-prompt-color);
+        border: none;
+      }
+      site-entry:nth-of-type(2n+1) {
+        --cr-back-entry: var(--setting-link-row-background-color);
+      }
+      site-entry:nth-of-type(2n) {
+        --cr-back-entry: var(--setting-passwd-odd-background-color);
+      }
+      .set-head{
+        display: flex;
+        height: 48px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 10px;
+      }
+      .set-head .msg-icon{
+        width: 32px;
+        height: 32px;
+        background: url(chrome://resources/images/deepin_cloudprint_config_helper.svg) no-repeat center;
+        background-size: contain;
+      }
+      .set-head .close-icon{
+        width: 22px;
+        height: 22px;
+        background: var(--cr-my-dialog-close-normal) no-repeat center;
+        background-size: 11px;
+        margin: 0px 4px;
+      }
+      .ms-title{
+       line-height: 143%;
+       padding: 0;
+       text-align: center;
+       font-weight: 500;
+       color: var(--cr-my-dialog-title-color);
+       margin-bottom: 5px;
+       font-size: 100%;
+     }
+     .footer-btn {
+       padding: 0 10px;
+       margin-bottom: 10px;
+       margin-top: 20px;
+       justify-content: space-between;
+       padding-bottom: 0;
+       padding-top: 0;
+       align-items: center;
+     }
+    .footer-btn cr-button{
+      width: 170px;
+      height: 36px;
+      font-weight: 500;
+      border-radius: 8px; 
+    }
+    .cancel-button{
+      background: var(--cr-my-dialog-cancel-btn);
+      border: 1px solid var(--cr-my-dialog-cancel-btn-border-color);
+      border-radius: 8px;
+      box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.05); 
+      color: var(--cr-input-font-color);
+      margin-right: 0;
+    }
+    .action-button{
+      background: var(--cr-my-dialog-save-btn);
+      border: 1px solid rgba(0,0,0,0.03);
+      border-radius: 8px;
+      box-shadow: 0px 4px 4px 0px var(--cr-my-dialog-save-btn-box-shadow);
+      color: #ffffff;
+    }
+    .s-body{
+      color: var(--setting-dialog-tips-font-color);
+      text-align: center;
+      line-height: 143%;
+      width: 380px;
+      box-sizing: border-box;
+    }
+    .line{
+      width: 1px;
+      height: 28px;
+      background: var(--cr-my-dialog-line-color);
+    }
+    cr-dialog{
+      --cr-dialog-top-container-min-height:0;
+      --cr-my-container-overflow:auto;
+    }
+    .md-select {
+        position: relative;
+        box-sizing: border-box;
+      }
+      .select-ul {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 9px 0px;
+        border-radius: 18px;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        margin: 0px;
+        box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.2);
+        z-index: 9;
+        display: none;
+        max-height: 300px;
+        overflow: auto;
+        background: var(--setting-dropdown-background);
+        background-size: 100% 100%;
+      }
+      .select-ul::-webkit-scrollbar {
+        width: 6px;
+        border-radius: 18px;
+        background-color: var(--setting-dropdown-background);
+      }
+      .select-ul::-webkit-scrollbar-thumb {
+        background-color: var(--setting-scrollbar-background-color);
+        border: 1px solid var(--setting-menu-hover-background-color);
+        border-radius: 4px;
+      }
+      .select-ul>li {
+        width: 210px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 32px;
+        line-height: 1;
+        font-weight: 500;
+        text-align: left;
+        color: var(--setting-dropdown-font-color);
+        list-style: none;
+        box-sizing: border-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-bottom: 1px;
+      }
+      .select-ul>li.select {
+        background-image: var(--setting-dropdown-checked-icon);
+        background-repeat: no-repeat;
+        background-size: 15px 13px;
+        background-position: 11px center;
+      }
+      .select-ul>li:hover {
+        color: #fff;
+        background-color: var(--cr-sidebar-active-background-color);
+        box-shadow: 0px 4px 6px 0px var(--cr-sidebar-active-box-shadow);
+      }
+      .select-ul>li.select:hover {
+        background-image: url(chrome://theme/MENUITEM_SELECT_HOVER);
+      }
+      .select-value {
+        overflow: hidden;
+        white-space: nowrap;
+      }
+    </style>
+    <div id="sort">
+      <label id="sortLabel">$i18n{siteSettingsAllSitesSort}</label>
+      <div id="sortMethod" class="md-select" 
+        aria-labelledby="sortLabel"
+        on-click="showOption">
+        <div class="select-value">[[selectValue]]</div>
+        <ul class="select-ul">
+          <li id="visited" data-value$="[[sortMethods_.MOST_VISITED]]"
+            on-click="selectClick">
+            $i18n{siteSettingsAllSitesSortMethodMostVisited}
+          </li>
+          <li id="storage" data-value$="[[sortMethods_.STORAGE]]"
+            on-click="selectClick">
+            $i18n{siteSettingsAllSitesSortMethodStorage}
+          </li>
+          <li id="name" data-value$="[[sortMethods_.NAME]]"
+            on-click="selectClick">
+            $i18n{siteSettingsAllSitesSortMethodName}
+          </li>
+        </ul>
+        <!-- <option value="[[sortMethods_.MOST_VISITED]]">
+          $i18n{siteSettingsAllSitesSortMethodMostVisited}
+        </option>
+        <option value="[[sortMethods_.STORAGE]]">
+          $i18n{siteSettingsAllSitesSortMethodStorage}
+        </option>
+        <option value="[[sortMethods_.NAME]]">
+          $i18n{siteSettingsAllSitesSortMethodName}
+        </option> -->
+      </div>
+    </div>
+    <div id="clearAllContainer" hidden$="[[!storagePressureFlagEnabled_]]">
+      <div id="clearLabel">
+        $i18n{siteSettingsClearAllStorageDescription} [[totalUsage_]]
+      </div>
+      <div id="clearAllButton">
+        <cr-button type="button" on-click="onConfirmClearAllData_">
+          $i18n{siteSettingsClearAllStorageLabel}
+        </cr-button>
+      </div>
+    </div>
+    <div class="list-frame" hidden$="[[!siteGroupMapEmpty_(siteGroupMap)]]">
+      <div class="list-item secondary no-data">$i18n{emptyAllSitesPage}</div>
+    </div>
+    <div class="list-frame" hidden$="[[!noSearchResultFound_(filteredList_)]]">
+      <div class="list-item secondary no-data">$i18n{noSitesFound}</div>
+    </div>
+    <div class="list-frame without-heading" id="listContainer">
+      <iron-list id="allSitesList"
+          items="[[filteredList_]]"
+          scroll-target="[[subpageScrollTarget]]">
+        <template>
+          <site-entry site-group="[[item]]" list-index="[[index]]"
+              iron-list-tab-index="[[tabIndex]]"
+              focus-row-index="[[index]]"
+              tabindex$="[[tabIndex]]"
+              last-focused="{{lastFocused_}}"
+              list-blurred="{{listBlurred_}}"
+              sort-method="[[sortMethod_]]">
+          </site-entry>
+        </template>
+      </iron-list>
+    </div>
+
+    <!-- Overflow menu. -->
+    <cr-lazy-render id="menu">
+      <template>
+        <cr-action-menu role-description="$i18n{menu}">
+          <button class="dropdown-item" role="menuitem"
+              on-click="onConfirmResetSettings_">
+            $i18n{siteSettingsSiteGroupReset}
+          </button>
+          <button class="dropdown-item" role="menuitem"
+              on-click="onConfirmClearData_">
+            $i18n{siteSettingsSiteGroupDelete}
+          </button>
+        </cr-action-menu>
+      </template>
+    </cr-lazy-render>
+
+    <!-- Confirm reset settings dialog. -->
+    <cr-lazy-render id="confirmResetSettings">
+      <template>
+        <cr-dialog close-text="$i18n{close}">
+          <div slot="setting" class="set-head">
+            <div class="msg-icon"></div>
+            <div class="close-icon" on-click="onCloseDialog_"></div>
+          </div> 
+          <div slot="title" class="ms-title">
+            $i18n{siteSettingsSiteGroupResetDialogTitle}
+          </div>
+          <div slot="body" class="s-body">
+            [[getResetPermissionsLabel_(actionMenuModel_)]]
+          </div>
+          <div slot="button-container"  class="footer-btn">
+            <cr-button class="cancel-button" on-click="onCloseDialog_">
+              $i18n{cancel}
+            </cr-button>
+            <div class="line"></div>
+            <cr-button class="action-button" on-click="onResetSettings_">
+              $i18n{siteSettingsSiteResetAll}
+            </cr-button>
+          </div>
+        </cr-dialog>
+      </template>
+    </cr-lazy-render>
+
+    <!-- Confirm clear data dialog. -->
+    <cr-lazy-render id="confirmClearData">
+      <template>
+        <cr-dialog close-text="$i18n{close}">
+        <style include="clear-storage-dialog-shared">
+          .clear-button{
+            background: var(--cr-input-show-background-color);
+            border: 1px solid var(--cr-my-dialog-cancel-btn-border-color);
+            box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.05); 
+            color: #ff5736;
+          }
+        </style>
+          <div slot="setting" class="set-head">
+            <div class="msg-icon"></div>
+            <div class="close-icon" on-click="onCloseDialog_"></div>
+          </div>
+          <div slot="title" class="ms-title">
+            $i18n{siteSettingsSiteGroupDeleteDialogTitle}
+          </div>
+          <div slot="body" class="s-body">
+            [[getClearDataLabel_(
+                actionMenuModel_, storagePressureFlagEnabled_)]]
+          </div>
+          <div slot="button-container" class="footer-btn">
+            <cr-button class="cancel-button" on-click="onCloseDialog_">
+              $i18n{cancel}
+            </cr-button>
+            <div class="line"></div>
+            <cr-button class="action-button clear-button" on-click="onClearData_">
+              $i18n{siteSettingsSiteClearStorage}
+            </cr-button>
+          </div>
+        </cr-dialog>
+      </template>
+    </cr-lazy-render>
+
+    <!-- New version of confirm clear data dialog to show if storage
+         pressure UI flag is enabled. -->
+    <cr-lazy-render id="confirmClearDataNew">
+      <template>
+        <cr-dialog close-text="$i18n{close}">
+          <style include="clear-storage-dialog-shared">
+            .clear-button{
+              background: var(--cr-input-show-background-color);
+              border: 1px solid var(--cr-my-dialog-cancel-btn-border-color);
+              box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.05); 
+              color: #ff5736;
+            }
+          </style>
+          <div slot="setting" class="set-head">
+            <div class="msg-icon"></div>
+            <div class="close-icon" on-click="onCloseDialog_"></div>
+          </div>
+          <div slot="title" class="ms-title">
+            $i18n{siteSettingsSiteGroupDeleteDialogTitle}
+          </div>
+          <div slot="body" class="s-body">
+            [[getClearDataLabel_(
+                actionMenuModel_, storagePressureFlagEnabled_)]]
+            <div class="detail-list">
+              <div class="detail">
+                <iron-icon icon="all-sites:logout"></iron-icon>
+                $i18n{siteSettingsSiteGroupDeleteSignOut}
+              </div>
+              <div class="detail">
+                <iron-icon icon="all-sites:offline"></iron-icon>
+                $i18n{siteSettingsSiteGroupDeleteOfflineData}
+              </div>
+            </div>
+          </div>
+          <div slot="button-container" class="footer-btn">
+            <cr-button class="cancel-button" on-click="onCloseDialog_">
+              $i18n{cancel}
+            </cr-button>
+            <div class="line"></div>
+            <cr-button class="action-button clear-button" on-click="onClearData_">
+              $i18n{siteSettingsSiteClearStorage}
+            </cr-button>
+          </div>
+        </cr-dialog>
+      </template>
+    </cr-lazy-render>
+
+    <!-- Confirm clear all data dialog. -->
+    <cr-lazy-render id="confirmClearAllData">
+      <template>
+        <cr-dialog close-text="$i18n{close}">
+          <style include="clear-storage-dialog-shared">
+            .action-button{
+              background: var(--cr-input-show-background-color);
+              border: 1px solid var(--cr-my-dialog-cancel-btn-border-color);
+              box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.05); 
+              color: #ff5736;
+            }
+          </style>
+          <div slot="setting" class="set-head">
+            <div class="msg-icon"></div>
+            <div class="close-icon" on-click="onCloseDialog_"></div>
+          </div>
+          <div slot="title" class="ms-title">
+            $i18n{siteSettingsClearAllStorageDialogTitle}
+          </div>
+          <div slot="body" class="s-body">
+            [[getClearAllDataLabel_(totalUsage_)]]
+            <div class="detail-list">
+              <div class="detail">
+                <iron-icon icon="all-sites:logout"></iron-icon>
+                $i18n{siteSettingsClearAllStorageSignOut}
+              </div>
+              <div class="detail">
+                <iron-icon icon="all-sites:offline"></iron-icon>
+                $i18n{siteSettingsSiteGroupDeleteOfflineData}
+              </div>
+            </div>
+          </div>
+          <div slot="button-container"  class="footer-btn">
+            <cr-button class="cancel-button" on-click="onCloseDialog_">
+              $i18n{cancel}
+            </cr-button>
+            <div class="line"></div>
+            <cr-button class="action-button clear-button" on-click="onClearAllData_">
+              $i18n{siteSettingsSiteClearStorage}
+            </cr-button>
+          </div>
+        </cr-dialog>
+      </template>
+    </cr-lazy-render>
+  </template>
+  <script src="all_sites.js"></script>
+</dom-module>

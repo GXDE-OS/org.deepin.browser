@@ -1,0 +1,30 @@
+// Copyright 2019 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+// This icon has a bigger circle to figure ratio in compare to incognito.icon.
+
+CANVAS_DIMENSIONS, 24,
+MOVE_TO, 12, 3,
+R_ARC_TO, 9, 9, 0, 1, 1, 0, 18,
+R_ARC_TO, 9, 9, 0, 0, 1, 0, -18,
+CLOSE,
+R_MOVE_TO, 6, 6,
+R_CUBIC_TO, -0.65f, 1.93f, -5.02f, 0.39f, -6, 2.21f,
+R_CUBIC_TO, -0.98f, -1.82f, -5.34f, -0.33f, -6, -2.21f,
+R_CUBIC_TO, 0.11f, 7.56f, 5.35f, 5.35f, 6, 7.5f,
+R_CUBIC_TO, 0.66f, -2.15f, 5.89f, 0.06f, 6, -7.5f,
+CLOSE,
+R_MOVE_TO, -2.07f, 2.81f,
+R_CUBIC_TO, -0.55f, 2.26f, -2.29f, 1.54f, -2.89f, 1.93f,
+R_CUBIC_TO, 0.87f, -2.26f, 1.85f, -1.27f, 2.89f, -1.93f,
+CLOSE,
+R_MOVE_TO, -7.58f, -0.06f,
+R_CUBIC_TO, 1.04f, 0.72f, 2.02f, -0.33f, 2.89f, 1.93f,
+R_ARC_TO, 0.85f, 0.85f, 0, 0, 0, -0.12f, -0.05f,
+R_CUBIC_TO, -0.77f, -1.27f, -1.61f, -0.88f, -2.51f, -1.12f,
+R_ARC_TO, 3.41f, 3.41f, 0, 0, 1, -0.27f, -0.76f,
+CLOSE,
+R_MOVE_TO, 0.27f, 0.76f,
+R_CUBIC_TO, 0.89f, 0.26f, 1.73f, -0.12f, 2.5f, 1.12f,
+R_CUBIC_TO, -0.6f, -0.18f, -1.75f, 0.15f, -2.43f, -0.98f,
+CLOSE

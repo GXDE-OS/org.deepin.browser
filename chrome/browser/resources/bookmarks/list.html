@@ -1,0 +1,74 @@
+<style include="shared-style">
+  :host {
+    color: var(--cr-secondary-text-color);
+    min-width: 300px;
+    overflow-y: auto;
+    padding-bottom: 24px;
+    padding-inline-end: var(--card-padding-side);
+    padding-inline-start: calc(var(--card-padding-side) -
+        var(--splitter-width));
+    padding-top: 24px;
+  }
+  :host::-webkit-scrollbar {
+    @apply --cr-scrollbar;
+  }
+  :host::-webkit-scrollbar-thumb {
+    @apply --cr-scrollbar-thumb;
+  }
+
+  #list {
+    background-color: var(--cr-iron-background-color);
+    margin: 0 auto;
+    max-width: 1000px;
+    min-height: 100%;
+    padding-left: 40px;
+    box-sizing: border-box;
+    padding-right: 28px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .centered-message {
+    align-items: center;
+    cursor: default;
+    display: flex;
+    font-weight: 500;
+    height: 100%;
+    justify-content: center;
+    user-select: none;
+    max-width: 1000px;
+    font-size: 20px;
+    font-weight: Normal;
+    margin: 0 auto;
+    background-color: var(--cr-iron-background-color);
+    color: var(--cr-iron-no-result-font-color);
+  }
+
+  [role='row']:focus-within {
+    z-index: 1;
+  }
+  /* .row {
+    margin-top: 10px;
+  } */
+</style>
+<iron-list id="list"
+    items="[[displayedList_]]"
+    hidden$="[[isEmptyList_(displayedList_.length)]]"
+    role="grid"
+    aria-label="$i18n{listAxLabel}">
+  <template>
+    <div class="row" role="row" id$="bookmark_[[index]]"
+        aria-rowindex$="[[getAriaRowindex_(index)]]">
+      <bookmarks-item item-id="[[item.id]]"
+          draggable="true"
+          role="gridcell"
+          tabindex$="[[tabIndex]]"
+          iron-list-tab-index="[[tabIndex]]">
+      </bookmarks-item>
+    </div>
+  </template>
+</iron-list>
+<div id="message" class="centered-message"
+    hidden$="[[!isEmptyList_(displayedList_.length)]]">
+  [[emptyListMessage_(searchTerm_)]]
+</div>

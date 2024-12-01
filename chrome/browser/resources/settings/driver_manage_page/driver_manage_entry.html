@@ -1,0 +1,83 @@
+<link rel="import" href="chrome://resources/html/polymer.html">
+
+<link rel="import" href="chrome://resources/cr_elements/cr_action_menu/cr_action_menu.html">
+<link rel="import" href="chrome://resources/cr_elements/cr_icon_button/cr_icon_button.html">
+<link rel="import" href="chrome://resources/cr_elements/icons.html">
+<link rel="import" href="chrome://resources/html/assert.html">
+<link rel="import" href="chrome://resources/html/cr/ui/focus_row_behavior.html">
+<link rel="import" href="chrome://resources/html/cr/ui/focus_without_ink.html">
+<link rel="import" href="../controls/extension_controlled_indicator.html">
+<link rel="import" href="driver_manage_entry_css.html">
+<link rel="import" href="driver_manage_browser_proxy.html">
+<link rel="import" href="../settings_shared_css.html">
+<link rel="import" href="../site_favicon.html">
+
+<dom-module id="settings-driver-manage-entry">
+  <template>
+    <style include="settings-shared driver-manage-entry">
+      :host([is-default]) .list-item {
+        font-weight: 500;
+      }
+      .list-item > div{
+        padding-left: 8px;
+        box-sizing: border-box;
+        word-break: break-all;
+        color: #414d68;
+      }
+      #name-column {
+        align-items: center;
+        display: flex;
+      }
+
+      #name-column{
+        flex: 30;
+        overflow: hidden;
+      }
+      #name-column div{
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      #url-column {
+        flex: 54;
+        word-break: break-word;
+      }
+
+      cr-icon-button{
+        margin-right: 9px;
+        margin-left: 15px;
+      }
+      .removed {
+        margin-left: 20px;
+        display: none;
+      }
+      .false #name-column,
+      .false #url-column {
+        opacity: .4;
+      }
+      .false .removed {
+        display: inline-block;
+      }
+    </style>
+
+    <div class$="list-item [[engine.valid]]" focus-row-container>
+      <div id="name-column">
+        <div>[[engine.name]] <span class="removed">[[removed]]</span></div>
+      </div>
+      <div id="url-column" class="text-elide">[[engine.path]]</div>
+      <cr-icon-button class="icon-more-vert" on-click="onDotsTap_"
+          title="$i18n{moreActions}" focus-row-control
+          focus-type="cr-menu-button"></cr-icon-button>
+      <cr-action-menu role-description="$i18n{menu}">
+        <button class="dropdown-item" on-click="onEditTap_" id="edit">
+          $i18n{edit}
+        </button>
+        <button class="dropdown-item" on-click="onDeleteTap_"  id="delete">
+          $i18n{delete}
+        </button>
+      </cr-action-menu>
+    </div>
+  </template>
+  <script src="driver_manage_entry.js"></script>
+</dom-module>

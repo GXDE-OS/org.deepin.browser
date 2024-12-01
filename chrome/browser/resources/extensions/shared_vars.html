@@ -1,0 +1,32 @@
+<custom-style>
+<style>
+  html {
+    /* Note: error-color is used for many warnings. There's also an orange-y
+     * warning color in 1 place. */
+    --error-color: var(--google-red-700);
+    --extensions-card-height: 160px;
+    --separator-gap: 9px;
+    --extensions-card-bg-color: var(--cr-iron-background-color);
+    --extensions-item-description-color: #526a7f;
+    --cr-button-choose-bg-color: var(--cr-sidebar-active-background-color);
+    --cr-button-choose-shadow-color: rgba(44,167,248,0.4);
+    --cr-dialog-content-color: rgba(0,0,0,0.7);
+    --extentions-back-background: url(chrome://theme/SETTING_BACK) no-repeat center;
+  }
+    
+  html .dark{
+    --extensions-card-bg-color: var(--cr-iron-background-color);
+    --extensions-item-description-color: #6d7c88;
+    --cr-button-choose-bg-color: var(--cr-sidebar-active-background-color);
+    --cr-button-choose-shadow-color: rgba(0,42,175,0.40);
+    --cr-dialog-content-color: rgba(255,255,255,0.7);
+    --extentions-back-background: url(chrome://theme/SETTING_BACK_DARK) no-repeat center;
+  }
+ 
+  @media (prefers-color-scheme: dark) {
+    html {
+      --error-color: var(--google-red-refresh-300);
+    }
+  }
+</style>
+</custom-style>

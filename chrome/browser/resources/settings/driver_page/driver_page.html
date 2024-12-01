@@ -1,0 +1,69 @@
+<link rel="import" href="chrome://resources/html/polymer.html">
+
+<link rel="import" href="chrome://resources/cr_elements/policy/cr_policy_pref_indicator.html">
+<link rel="import" href="chrome://resources/cr_elements/shared_vars_css.html">
+<link rel="import" href="chrome://resources/cr_elements/md_select_css.html">
+<link rel="import" href="chrome://resources/html/cr.html">
+<link rel="import" href="../controls/extension_controlled_indicator.html">
+<link rel="import" href="../i18n_setup.html">
+<link rel="import" href="../route.html">
+<link rel="import" href="../router.html">
+<link rel="import" href="../settings_page/settings_animated_pages.html">
+<link rel="import" href="../settings_page/settings_subpage.html">
+<link rel="import" href="../settings_shared_css.html">
+<link rel="import" href="../settings_vars_css.html">
+
+<dom-module id="settings-driver-page">
+  <template>
+    <style include="settings-shared md-select">
+      #driver-wrapper {
+        align-items: center;
+        display: flex;
+        min-height: var(--settings-row-min-height);
+        width: 100%;
+        justify-content: space-between;
+        color: #414d68;
+      }
+      #pages{
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      #pages>div{
+        background: var(--setting-link-row-background-color);
+        border-radius: 8px;
+      }
+      .settings-box{
+        padding-bottom: 6px;
+        padding-top: 6px;
+      }
+      .settings-box.block{
+        display: flex;
+        align-items: center;
+      }
+      settings-subpage{
+        left: -40px;
+        right: -40px;
+        padding: 0 40px;
+      }
+    </style>
+    <settings-animated-pages id="pages" section="driver">
+      <div route-path="default">
+
+        <!-- Manage driver -->
+        <cr-link-row class="hr" id="enginesSubpageTrigger"
+            label="$i18n{usbkeydriverManagerLabelInSettingPage}"
+            on-click="onManageSearchEnginesTap_"
+            role-description="$i18n{subpageArrowRoleDescription}"></cr-link-row>
+      </div>
+
+      <template is="dom-if" route-path="/driverManage">
+        <settings-subpage
+            associated-control="[[$$('#enginesSubpageTrigger')]]"
+            page-title="$i18n{usbkeydriverManagerLabelInSettingPage}">
+          <settings-driver-manage-page prefs="{{prefs}}">
+        </settings-subpage>
+      </template>
+    </settings-animated-pages>
+  </template>
+  <script src="driver_page.js"></script>
+</dom-module>

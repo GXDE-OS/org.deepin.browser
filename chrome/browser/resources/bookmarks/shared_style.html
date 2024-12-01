@@ -1,0 +1,120 @@
+<template>
+  <style include="cr-shared-style">
+    hr {
+      background: var(--cr-bookmarks-shared-line-color);
+      border-width: 0;
+      height: 1px;
+      margin: 8px 0;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      hr {
+        background: var(--cr-separator-color);
+      }
+    }
+    /* .line {
+      height: 10px;
+      left: 0;
+      position: absolute;
+      z-index: 1;
+      display: none;
+      width: 93%
+    }
+    .line .line-content {
+      width: 100%;
+      height: 2px;
+      position: relative;
+      background-color: var(--interactive-color);
+    }
+    .line-content::before  {
+      content: "";
+      display: block;
+      width: 4px;
+      height: 6px;
+      position: absolute;
+      background: url(chrome://resources/images/t_right.svg) no-repeat;
+      background-size: 100%;
+      left: 0;
+      top: -2px;
+    }
+    .line-content::after {
+      content: "";
+      display: block;
+      width: 4px;
+      height: 6px;
+      position: absolute;
+      background: url(chrome://resources/images/t_right.svg) no-repeat;
+      background-size: 100%;
+      right: 0;
+      top: -2px;
+      transform: rotate(180deg);
+    } */
+    .drag-above::before,
+    .drag-below::after {
+      background-clip: padding-box;
+      background-color: var(--interactive-color);
+      border: 4px solid var(--interactive-color);
+      border-bottom-color: transparent;
+      border-radius: 0;
+      border-top-color: transparent;
+      box-sizing: border-box;
+      content: '';
+      display: block;
+      height: 10px;
+      left: 0;
+      position: absolute;
+      right: 0;
+      z-index: 1;
+    }
+
+    .drag-above::before {
+      top: 0;
+      transform: translateY(-50%);
+    }
+
+    .drag-below::after {
+      bottom: 0;
+      transform: translateY(50%);
+    }
+
+    /* .drag-on {
+      background-color: var(--highlight-color);
+    } */
+
+    :host-context([hide-focus-ring]) [tabindex]:focus {
+      outline: none;
+    }
+
+    .folder-icon {
+      content: url(chrome://theme/IDR_BOOKMARK_FOLDER);
+      height: 20px;
+      min-width: 20px;
+      width: 20px;
+    }
+
+<if expr="is_macosx">
+    @media (prefers-color-scheme: dark) {
+      .folder-icon {
+         content: url(chrome://theme/IDR_BOOKMARK_FOLDER);
+      }
+    }
+</if>
+
+<if expr="not is_macosx">
+    .folder-icon[open] {
+      content: url(chrome://theme/IDR_BOOKMARK_FOLDER);
+    }
+</if>
+
+    :host-context([dir=rtl]) .folder-icon {
+      transform: scaleX(-1);
+    }
+
+    .website-icon {
+      background-repeat: no-repeat;
+      height: 16px;
+      margin: 2px;
+      width: 16px;
+    }
+  </style>
+</template>

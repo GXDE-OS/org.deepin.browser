@@ -1,0 +1,233 @@
+<link rel="import" href="chrome://resources/html/polymer.html">
+
+<link rel="import" href="chrome://resources/html/assert.html">
+<link rel="import" href="chrome://resources/html/cr/ui/focus_without_ink.html">
+<link rel="import" href="chrome://resources/html/i18n_behavior.html">
+<link rel="import" href="chrome://resources/html/list_property_update_behavior.html">
+<link rel="import" href="chrome://resources/html/web_ui_listener_behavior.html">
+<link rel="import" href="chrome://resources/cr_elements/cr_button/cr_button.html">
+<link rel="import" href="chrome://resources/cr_elements/cr_dialog/cr_dialog.html">
+<link rel="import" href="chrome://resources/cr_elements/cr_search_field/cr_search_field.html">
+<link rel="import" href="chrome://resources/cr_elements/icons.html">
+<link rel="import" href="chrome://resources/polymer/v1_0/iron-icon/iron-icon.html">
+<link rel="import" href="chrome://resources/polymer/v1_0/iron-list/iron-list.html">
+<link rel="import" href="chrome://resources/polymer/v1_0/paper-spinner/paper-spinner-lite.html">
+<link rel="import" href="../global_scroll_target_behavior.html">
+<link rel="import" href="../i18n_setup.html">
+<link rel="import" href="../route.html">
+<link rel="import" href="../router.html">
+<link rel="import" href="../settings_shared_css.html">
+<link rel="import" href="cookie_info.html">
+<link rel="import" href="local_data_browser_proxy.html">
+<link rel="import" href="site_settings_behavior.html">
+<link rel="import" href="site_data_entry.html">
+
+<dom-module id="site-data">
+  <template>
+    <style include="settings-shared">
+      paper-spinner-lite {
+        height: var(--cr-icon-size);
+        opacity: 0;
+        transition-delay: 1s;
+        width: var(--cr-icon-size);
+      }
+
+      paper-spinner-lite[active] {
+        opacity: 1;
+      }
+
+      #removeShowingSites,#removeThirdPartyCookies {
+        margin-inline-start: auto;
+        background: var(--cr-my-dialog-cancel-btn);
+        border: 1px solid var(--cr-my-dialog-cancel-btn-border-color);
+        border-radius: 8px;
+        box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.05);
+        padding: 0px 11px;
+        color: var(--cr-input-font-color);
+        height: auto;
+        min-height: 36px;
+      }
+      .backnone{
+        background: none;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      #list{
+        margin-top: 20px;
+        margin-left: 7px;
+        margin-right: 13px;
+      }
+      site-data-entry{
+        --cr-site-background:none;
+        --settings-row-two-line-min-height:56px;
+      }
+      site-data-entry:nth-child(even){
+        background: var(--setting-link-row-background-color);
+        border-radius: 8px;
+      }
+      site-data-entry:nth-child(odd){
+        background: var(--setting-passwd-odd-background-color);
+        border-radius: 8px;
+      }
+      .continuation{
+        padding: 0;
+      }
+      .set-head{
+        display: flex;
+        height: 48px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 10px;
+      }
+      .set-head .msg-icon{
+        width: 32px;
+        height: 32px;
+        background: url(chrome://resources/images/deepin_cloudprint_config_helper.svg) no-repeat center;
+        background-size: contain;
+      }
+      .set-head .close-icon{
+        width: 22px;
+        height: 22px;
+        background: var(--cr-my-dialog-close-normal) no-repeat center;
+        background-size: 11px;
+        margin: 0px 4px;
+      }
+      .ms-title{
+       line-height: 143%;
+       padding: 0;
+       text-align: center;
+       font-weight: 500;
+       color: var(--cr-my-dialog-title-color);
+       font-size:100%;
+       margin-bottom: 5px;
+     }
+     .footer-btn {
+       margin-bottom: 10px;
+       justify-content: space-between;
+       padding-bottom: 0;
+       padding-top: 0;
+       align-items: center;
+       padding-left: 10px;
+       padding-right: 10px;
+       margin-top: 20px;
+     }
+    .footer-btn cr-button{
+      width: 170px;
+      height: 36px;
+      font-weight: 500;
+      border-radius: 8px; 
+    }
+    .cancel-button{
+      background: var(--cr-my-dialog-cancel-btn);
+      border: 1px solid var(--cr-my-dialog-cancel-btn-border-color);
+      border-radius: 8px;
+      box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.05); 
+      color: var(--cr-input-font-color);
+      margin-right: 0;
+    }
+    .action-button{
+      background: var(--cr-my-dialog-save-btn);
+      border: 1px solid rgba(0,0,0,0.03);
+      border-radius: 8px;
+      box-shadow: 0px 4px 4px 0px var(--cr-my-dialog-save-btn-box-shadow);
+      color: #ffffff;
+    }
+    .action-button[aria-disabled='true']{
+      opacity: 0.4;
+    }
+    .s-body{
+      color: var(--setting-dialog-tips-font-color);
+      text-align: center;
+      line-height: 143%;
+      max-width: 380px;
+      box-sizing: border-box;
+    }
+    .line{
+      width: 1px;
+      height: 28px;
+      background: var(--cr-my-dialog-line-color);
+    }
+    cr-dialog{
+      --cr-dialog-top-container-min-height:0;
+      --cr-my-container-overflow:auto;
+    }
+    .clear-button {
+      background: var(--cr-input-show-background-color);
+      border: 1px solid var(--cr-my-dialog-cancel-btn-border-color);
+      box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.05);
+      color: #ff5736;
+    }
+    </style>
+    <div class="settings-box continuation backnone">
+      <paper-spinner-lite active="[[isLoading_]]"></paper-spinner-lite>
+      <cr-button disabled$="[[isLoading_]]" id="removeShowingSites"
+          on-click="onRemoveShowingSitesTap_" hidden$="[[!sites.length]]">
+        [[computeRemoveLabel_(filter)]]
+      </cr-button>
+      <cr-button disabled$="[[isLoading_]]" id="removeThirdPartyCookies"
+          on-click="onRemoveThirdPartyCookiesTap_"
+          hidden$="[[!showRemoveThirdPartyCookies_(sites.length, filter)]]">
+          $i18n{siteSettingsCookieRemoveAllThirdParty}
+      </cr-button>
+    </div>
+    <iron-list id="list" items="[[sites]]" preserve-focus
+        scroll-target="[[subpageScrollTarget]]" class="cr-separators">
+      <template>
+        <site-data-entry id$="siteItem_[[item.site]]" actionable
+            model="[[item]]" first$="[[!index]]" tabindex$="[[tabIndex]]"
+            iron-list-tab-index="[[tabIndex]]" last-focused="{{lastFocused_}}"
+            list-blurred="{{listBlurred_}}" on-click="onSiteClick_"
+            on-remove-site="onRemoveSite_" focus-row-index="[[index]]">
+        </site-data-entry>
+      </template>
+    </iron-list>
+
+    <!-- Confirm Delete dialog -->
+    <cr-dialog id="confirmDeleteDialog" close-text="$i18n{close}"
+        on-close="onConfirmDeleteDialogClosed_">
+      <div slot="setting" class="set-head">
+        <div class="msg-icon"></div>
+        <div class="close-icon" on-click="onCloseDialog_"></div>
+      </div>
+      <div slot="title"  class="ms-title">
+        $i18n{siteSettingsCookieRemoveDialogTitle}
+      </div>
+      <div slot="body" class="s-body">$i18n{siteSettingsCookieRemoveMultipleConfirmation}</div>
+      <div slot="button-container" class="footer-btn">
+        <cr-button class="cancel-button" on-click="onCloseDialog_">
+          $i18n{cancel}
+        </cr-button>
+        <div class="line"></div>
+        <cr-button class="action-button clear-button" on-click="onConfirmDelete_">
+          $i18n{siteSettingsCookiesClearAll}
+        </cr-button>
+      </div>
+    </cr-dialog>
+
+    <!-- Confirm Delete Third Party Cookies dialog -->
+    <cr-dialog id="confirmDeleteThirdPartyDialog" close-text="$i18n{close}"
+        on-close="onConfirmDeleteThirdPartyDialogClosed_">
+        <div slot="setting" class="set-head">
+          <div class="msg-icon"></div>
+          <div class="close-icon" on-click="onCloseThirdPartyDialog_"></div>
+        </div>
+      <div slot="title" class="ms-title">
+        $i18n{siteSettingsCookieRemoveThirdPartyDialogTitle}
+      </div>
+      <div slot="body" class="s-body">
+        $i18n{siteSettingsCookieRemoveThirdPartyConfirmation}
+      </div>
+      <div slot="button-container" class="footer-btn">
+        <cr-button class="cancel-button" on-click="onCloseThirdPartyDialog_">
+          $i18n{cancel}
+        </cr-button>
+        <div class="line"></div>
+        <cr-button class="action-button clear-button" on-click="onConfirmThirdPartyDelete_">
+          $i18n{siteSettingsCookiesClearThirdParty}
+        </cr-button>
+      </div>
+    </cr-dialog>
+
+  </template>
+  <script src="site_data.js"></script>
+</dom-module>

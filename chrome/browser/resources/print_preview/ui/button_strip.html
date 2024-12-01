@@ -1,0 +1,71 @@
+<style>
+  :host {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding-bottom: 16px;
+    padding-inline-end: 16px;
+    padding-top: 16px;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :host {
+      background-color: white;
+    }
+  }
+
+  :host cr-button:not(:last-child) {
+    margin-inline-end: 20px;
+  }
+
+  :host cr-button:last-child {
+    margin-inline-end: 0;
+  }
+  cr-button {
+    width: 165px;
+    height: 36px;
+    font-weight: 500;
+  }
+  cr-button.action-button {
+    margin-inline-end: 20px;
+    color: #fff;
+    background: var(--cr-my-dialog-save-btn);
+    border: 1px solid rgba(0,0,0,0.03);
+    border-radius: 8px;
+    box-shadow: 0px 4px 4px 0px var(--cr-my-dialog-save-btn-box-shadow);
+    position: relative;
+  }
+  cr-button.cancel-button {
+    margin-inline-end: 20px;
+    color: var(--cr-toolbar-search-field-prompt-color);
+    background: var(--cr-my-dialog-cancel-btn);
+    border: 1px solid var(--cr-my-dialog-cancel-btn-border-color);
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.05);
+    position: relative;
+  }
+  cr-button.cancel-button:after {
+    display: block;
+    content: "";
+    width: 3px;
+    height: 28px;
+    border-right: 1px solid var(--cr-my-dialog-line-color);
+    position: absolute;
+    right: -12px;
+    top: 4px;
+  }
+</style>
+<if expr="not is_win">
+<cr-button class="cancel-button" on-click="onCancelClick_">
+  $i18n{cancel}
+</cr-button>
+</if>
+<cr-button class="action-button" on-click="onPrintClick_"
+    disabled$="[[!printButtonEnabled_]]">
+  [[printButtonLabel_]]
+</cr-button>
+<if expr="is_win">
+<cr-button class="cancel-button" on-click="onCancelClick_">
+  $i18n{cancel}
+</cr-button>
+</if>

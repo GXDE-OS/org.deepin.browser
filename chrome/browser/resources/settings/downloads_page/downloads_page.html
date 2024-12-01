@@ -1,0 +1,116 @@
+<link rel="import" href="chrome://resources/html/polymer.html">
+
+<link rel="import" href="chrome://resources/cr_elements/cr_button/cr_button.html">
+<link rel="import" href="chrome://resources/html/util.html">
+<link rel="import" href="chrome://resources/html/web_ui_listener_behavior.html">
+<link rel="import" href="../controls/controlled_button.html">
+<link rel="import" href="../controls/settings_toggle_button.html">
+<link rel="import" href="../prefs/prefs_behavior.html">
+<link rel="import" href="../settings_shared_css.html">
+<link rel="import" href="downloads_browser_proxy.html">
+
+<dom-module id="settings-downloads-page">
+  <template>
+    <style include="settings-shared">
+      #defaultDownloadPath {
+        word-break: break-word;
+        color: var(--setting-download-path-color);
+      }
+      .two-line{
+        cursor: pointer;
+        background: var(--setting-expand-arrow-icon) no-repeat right 25px center;
+        background-size: 7px 10px;
+        background-color: var(--setting-link-row-background-color);
+        position: relative;
+      }
+      .settings-box-text{
+        display: flex;
+        justify-content: space-between;
+        padding-right: 23px;
+      }
+      .settings-box.two-line{
+        min-height: 40px;
+      }
+      .over-reset{
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .over-reset > .two-line{
+        color: var(--cr-toolbar-search-field-prompt-color);
+      }
+      #changeDownloadsPath{
+        position: absolute;
+        left: 0;
+        top:0;
+        width: 100%;
+        height: 100%;
+      }
+      .settings-box{
+        color: var(--cr-toolbar-search-field-prompt-color);
+      }
+      #resetAutoOpenFileTypes{
+        background: var(--cr-my-dialog-cancel-btn);
+        border: 1px solid var(--cr-my-dialog-cancel-btn-border-color);
+        border-radius: 8px;
+        box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.05);
+        min-width: 80px;
+        color: var(--cr-toolbar-search-field-prompt-color);
+      }
+    </style>
+    <!-- <div class="settings-box first two-line">
+      <div class="start settings-box-text">
+        <div>$i18n{downloadLocation}</div>
+        <div class="secondary" id="defaultDownloadPath">
+<if expr="not chromeos">
+          [[prefs.download.default_directory.value]]
+</if>
+<if expr="chromeos">
+          [[downloadLocation_]]
+</if>
+        </div>
+      </div>
+      <div class="separator"></div>
+      <controlled-button id="changeDownloadsPath"
+          label="$i18n{changeDownloadLocation}"
+          on-click="selectDownloadLocation_"
+          pref="[[prefs.download.default_directory]]"
+          end-justified>
+      </controlled-button>
+    </div> -->
+    <div class="over-reset">
+    <div class="settings-box first two-line" on-click="">
+      <div class="start settings-box-text">
+        <div>$i18n{downloadLocation}</div>
+        <div class="secondary" id="defaultDownloadPath">
+          <if expr="not chromeos">
+                    [[prefs.download.default_directory.value]]
+          </if>
+          <if expr="chromeos">
+                    [[downloadLocation_]]
+          </if>
+        </div>
+      </div>
+      <controlled-button id="changeDownloadsPath"
+          on-click="selectDownloadLocation_"
+          pref="[[prefs.download.default_directory]]"
+          end-justified>
+      </controlled-button>
+    </div>
+    <settings-toggle-button
+        pref="{{prefs.download.prompt_for_download}}"
+        label="$i18n{promptForDownload}">
+    </settings-toggle-button>
+    <template is="dom-if" if="[[autoOpenDownloads_]]" restamp>
+      <div class="settings-box">
+        <div class="start">$i18n{openFileTypesAutomatically}</div>
+        <div class="separator"></div>
+        <cr-button id="resetAutoOpenFileTypes"
+            on-click="onClearAutoOpenFileTypesTap_">
+          $i18n{clear}
+        </cr-button>
+      </div>
+    </template>
+  </div>
+  </template>
+  <script src="downloads_page.js"></script>
+</dom-module>

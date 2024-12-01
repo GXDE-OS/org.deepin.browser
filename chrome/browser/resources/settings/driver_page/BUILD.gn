@@ -1,0 +1,53 @@
+# Copyright 2018 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import("//third_party/closure_compiler/compile_js.gni")
+import("//tools/polymer/polymer.gni")
+import("../settings.gni")
+js_type_check("closure_compile") {
+  deps = [ ":driver_page" ]
+}
+
+js_library("driver_page") {
+  deps = [
+    "..:route",
+    "..:router",
+    "../prefs",
+    "../settings_page:settings_animated_pages",
+    "//ui/webui/resources/js:cr",
+  ]
+}
+
+js_type_check("closure_compile_module") {
+  is_polymer3 = true
+  deps = [ ":driver_page.m" ]
+}
+
+js_library("driver_page.m") {
+  sources = [ "$root_gen_dir/chrome/browser/resources/settings/driver_page/driver_page.m.js" ]
+  deps = [
+    "..:route.m",
+    "..:router.m",
+    "//third_party/polymer/v3_0/components-chromium/polymer:polymer_bundled",
+    "//ui/webui/resources/js:cr.m",
+  ]
+  extra_deps = [ ":driver_page_module" ]
+  externs_list = [ "$externs_path/settings_private.js" ]
+}
+
+group("polymer3_elements") {
+  public_deps = [ ":driver_page_module" ]
+}
+
+polymer_modulizer("driver_page") {
+  js_file = "driver_page.js"
+  html_file = "driver_page.html"
+  html_type = "dom-module"
+  namespace_rewrites = settings_namespace_rewrites
+  auto_imports = [
+    "chrome/browser/resources/settings/route.html|routes",
+    "chrome/browser/resources/settings/router.html|Router",
+    "ui/webui/resources/html/cr.html|addWebUIListener",
+  ]
+}

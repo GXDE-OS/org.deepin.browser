@@ -1,0 +1,57 @@
+<!doctype html>
+<html dir="$i18n{textdirection}" lang="$i18n{language}" class="loading"
+    $i18n{a11yenhanced}>
+<head>
+  <meta charset="utf-8">
+  <base href="chrome://downloads">
+  <title>$i18n{title}</title>
+  <link rel="stylesheet" href="chrome://resources/css/md_colors.css">
+  <style>
+    html {
+      background: var(--md-background-color);
+      /* Remove 300ms delay for 'click' event, when using touch interface. */
+      touch-action: manipulation;
+
+      --downloads-illustration-icon: url(chrome://downloads/images/no_downloads.svg);
+      --downloads-item-time-color: var(--cr-secondary-text-color);
+      --paper-progress-active-color: var(--google-blue-600);
+      --paper-progress-container-color: rgb(223, 222, 223);
+      --downloads-item-opacity: 0.4;
+      --downloads-item-icon-opacity: 0.4;
+    }
+
+    html .dark{
+      --downloads-illustration-icon: url(chrome://downloads/images/no_downloads_dark.svg);
+      --downloads-item-time-color: #6d7c88;
+      --paper-progress-active-color: linear-gradient(270deg, #095eff, #0059d2);;
+      --paper-progress-container-color: var(--cr-my-dialog-line-color);
+      --downloads-item-opacity: 1;
+      --downloads-item-icon-opacity: 0.4;
+    }
+
+    html.loading::before {
+      background-color: var(--md-toolbar-color);
+      border-bottom: var(--md-toolbar-border);
+      box-sizing: border-box;
+      content: '';
+      display: block;
+      height: var(--md-toolbar-height);
+    }
+
+    html:not(.loading),
+    body {
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <downloads-manager></downloads-manager>
+  <link rel="stylesheet" href="chrome://resources/css/text_defaults_md.css">
+  <script type="module" src="downloads.js"></script>
+</body>
+</html>

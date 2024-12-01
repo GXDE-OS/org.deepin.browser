@@ -1,0 +1,295 @@
+<link rel="import" href="chrome://resources/html/polymer.html">
+
+<link rel="import" href="chrome://resources/cr_elements/cr_button/cr_button.html">
+<link rel="import" href="chrome://resources/cr_elements/cr_dialog/cr_dialog.html">
+<link rel="import" href="chrome://resources/html/i18n_behavior.html">
+<link rel="import" href="chrome://resources/cr_elements/md_select_css.html">
+<link rel="import" href="chrome://resources/html/web_ui_listener_behavior.html">
+<link rel="import" href="chrome://resources/polymer/v1_0/iron-icon/iron-icon.html">
+<link rel="import" href="chrome://resources/polymer/v1_0/paper-spinner/paper-spinner-lite.html">
+<link rel="import" href="../controls/settings_checkbox.html">
+<link rel="import" href="../controls/settings_toggle_button.html">
+<link rel="import" href="../i18n_setup.html">
+<link rel="import" href="../icons.html">
+<link rel="import" href="import_data_browser_proxy.html">
+<link rel="import" href="../prefs/prefs_behavior.html">
+<link rel="import" href="../settings_vars_css.html">
+
+<dom-module id="settings-import-data-dialog">
+  <template>
+    <style include="settings-shared md-select">
+      .description {
+        align-items: center;
+        display: flex;
+        margin-top: 10px;
+        color: var(--setting-download-path-color);
+        margin-bottom: 8px;
+      }
+
+      paper-spinner-lite {
+        margin: 0 8px;
+      }
+
+      #successIcon {
+        fill: var(--cr-checked-color);
+        height: 80px;
+        margin: auto;
+        width: 100%;
+        background: url(chrome://resources/images/progress_success.svg) no-repeat center;
+        background-size: contain;
+      }
+
+      /* Prevent focus-outline to be chopped by the bottom of dialog body. */
+      .md-select {
+        margin-top: 2px;
+        width: 100%;
+      }
+      .set-head{
+        display: flex;
+        height: 48px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 10px;
+      }
+      .set-head .msg-icon{
+        width: 32px;
+        height: 32px;
+        background: url(chrome://resources/images/deepin_cloudprint_config_helper.svg) no-repeat center;
+        background-size: contain;
+      }
+      .set-head .close-icon{
+        width: 22px;
+        height: 22px;
+        background: var(--cr-my-dialog-close-normal) no-repeat center;
+        background-size: 11px;
+        margin: 0px 4px;
+      }
+     .ms-title{
+       line-height: 1.43;
+       padding: 0;
+       text-align: center;
+       color: var(--cr-my-dialog-title-color);
+       font-weight: 500;
+       margin-bottom: 10px;
+       font-size: 100%;
+     }
+     .footer-btn {
+       padding-left: 10px;
+       padding-right: 10px;
+       margin-bottom: 10px;
+       margin-top: 9px;
+       padding-top: 0;
+       padding-bottom: 0;
+       justify-content: space-between;
+       align-items: center;
+     }
+    .footer-btn cr-button{
+      width: 170px;
+      height: 36px;
+      font-weight: 500;
+      border-radius: 8px; 
+    }
+    .cancel-button,#done{
+      background: var(--cr-my-dialog-cancel-btn);
+      border: 1px solid var(--cr-my-dialog-cancel-btn-border-color);
+      border-radius: 8px;
+      box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.05); 
+      color: var(--cr-input-font-color);
+    }
+    .cancel-button{
+      margin-right: 0;
+    }
+    #done{
+      width: 100%;
+      margin-top: 20px;
+    }
+    .action-button{
+      background: var(--cr-my-dialog-save-btn);
+      border: 1px solid rgba(0,0,0,0.03);
+      border-radius: 8px;
+      box-shadow: 0px 4px 4px 0px var(--cr-my-dialog-save-btn-box-shadow);
+      color: #ffffff;
+    }
+    .action-button[aria-disabled='true']{
+      opacity: 0.4;
+    }
+    .md-select {
+      position: relative;
+      box-sizing: border-box;
+    }
+    .select-ul {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 9px 0px;
+      border-radius: 18px;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      margin: 0px;
+      box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.2);
+      z-index: 9;
+      display: none;
+      max-height: 300px;
+      overflow: auto;
+      background: var(--setting-dropdown-background);
+      background-size: 100% 100%;
+      width: 100%;
+    }
+    .select-ul::-webkit-scrollbar {
+      width: 6px;
+      border-radius: 18px;
+      background-color: var(--setting-dropdown-background);
+    }
+    .select-ul::-webkit-scrollbar-thumb {
+      background-color: var(--setting-scrollbar-background-color);
+      border: 1px solid var(--setting-menu-hover-background-color);
+      border-radius: 4px;
+    }
+    .select-ul>li {
+      width: 100%;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-left: 32px;
+      line-height: 1;
+      font-weight: 500;
+      text-align: left;
+      color: var(--setting-dropdown-font-color);
+      list-style: none;
+      box-sizing: border-box;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-bottom: 1px;
+    }
+    .select-ul>li.select {
+      background-image: var(--setting-dropdown-checked-icon);
+      background-repeat: no-repeat;
+      background-size: 15px 13px;
+      background-position: 11px center;
+    }
+    .select-ul>li:hover {
+      color: #fff;
+      background-color: var(--cr-sidebar-active-background-color);
+      box-shadow: 0px 4px 6px 0px var(--cr-sidebar-active-box-shadow);
+    }
+    .select-ul>li.select:hover {
+      background-image: url(chrome://theme/MENUITEM_SELECT_HOVER);
+    }
+    .select-value {
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    settings-checkbox{
+      --settings-row-min-height:20px;
+      margin-bottom: 10px;
+    }
+    .line{
+      width: 1px;
+      height: 28px;
+      background:  var(--cr-my-dialog-line-color);
+    }
+    .s-body{
+      padding: 0 10px;
+    }
+    cr-dialog{
+        --cr-my-container-overflow:auto;
+        --cr-dialog-top-container-min-height:0;
+      }
+    </style>
+    <cr-dialog id="dialog" close-text="$i18n{close}"
+        ignore-popstate>
+      <div slot="setting" class="set-head">
+        <div class="msg-icon"></div>
+        <div class="close-icon" on-click="closeDialog_"></div>
+      </div>
+      <div slot="title" class="ms-title">$i18n{importTitle}</div>
+      <div slot="body" class="s-body">
+        <div hidden$="[[!hasImportStatus_(
+            importStatusEnum_.SUCCEEDED, importStatus_)]]">
+          <iron-icon id="successIcon" icon="">
+          </iron-icon>
+          <div hidden$="[[!prefs.import_dialog_bookmarks.value]]">
+            <div class="description">$i18n{importSuccess}</div>
+            <settings-toggle-button class="first"
+                label="$i18n{showBookmarksBar}"
+                pref="{{prefs.bookmark_bar.show_on_all_tabs}}">
+            </settings-toggle-button>
+          </div>
+        </div>
+
+        <div hidden$="[[hasImportStatus_(
+              importStatusEnum_.SUCCEEDED, importStatus_)]]">
+          <div id="browserSelect" class="md-select"
+              aria-label="$i18n{importFromLabel}"
+              on-click="showOption">
+            <div class="select-value">[[selectTxt]]</div>
+            <ul class="select-ul">
+              <template is="dom-repeat" items="[[browserProfiles_]]">
+                <li 
+                class$="[[showSelect(selectedIndex,index)]]"
+                on-click="selectClick">[[getProfileDisplayName_(item.name, item.profileName)]]</li>
+              </template>
+            </ul>
+          </div>
+          <div class="description">$i18n{importDescription}</div>
+          <settings-checkbox id="importDialogHistory"
+              hidden="[[!selected_.history]]"
+              pref="{{prefs.import_dialog_history}}"
+              label="$i18n{importHistory}" no-set-pref>
+          </settings-checkbox>
+          <settings-checkbox id="importDialogBookmarks"
+              hidden="[[!selected_.favorites]]"
+              pref="{{prefs.import_dialog_bookmarks}}"
+              label="$i18n{importFavorites}" no-set-pref>
+          </settings-checkbox>
+          <settings-checkbox id="importDialogSavedPasswords"
+              hidden="[[!selected_.passwords]]"
+              pref="{{prefs.import_dialog_saved_passwords}}"
+              label="$i18n{importPasswords}" no-set-pref>
+          </settings-checkbox>
+          <settings-checkbox id="importDialogSearchEngine"
+              hidden="true"
+              pref="{{prefs.import_dialog_search_engine}}"
+              label="$i18n{importSearch}" no-set-pref>
+          </settings-checkbox>
+          <settings-checkbox id="importDialogAutofillFormData"
+              hidden="[[!selected_.autofillFormData]]"
+              pref="{{prefs.import_dialog_autofill_form_data}}"
+              label="$i18n{importAutofillFormData}" no-set-pref>
+          </settings-checkbox>
+        </div>
+      </div>
+      <div slot="button-container" class="footer-btn">
+        <!-- <paper-spinner-lite
+            active="[[hasImportStatus_(
+                importStatusEnum_.IN_PROGRESS, importStatus_)]]"
+            hidden="[[hasImportStatus_(
+                importStatusEnum_.SUCCEEDED, importStatus_)]]">
+        </paper-spinner-lite> -->
+        <cr-button id="cancel" class="cancel-button"
+            hidden="[[hasImportStatus_(
+                importStatusEnum_.SUCCEEDED, importStatus_)]]"
+            disabled="[[hasImportStatus_(
+                importStatusEnum_.IN_PROGRESS, importStatus_)]]"
+            on-click="closeDialog_">
+          $i18n{cancel}
+        </cr-button>
+        <div class="line" hidden$="[[hasImportStatus_(
+          importStatusEnum_.SUCCEEDED, importStatus_)]]"></div>
+        <cr-button id="import" class="action-button"
+            hidden="[[hasImportStatus_(
+                importStatusEnum_.SUCCEEDED, importStatus_)]]"
+            disabled="[[shouldDisableImport_(
+                importStatus_, noImportDataTypeSelected_)]]"
+            on-click="onActionButtonTap_">
+          [[getActionButtonText_(selected_)]]
+        </cr-button>
+
+        <cr-button id="done" class="action-button"
+            hidden$="[[!hasImportStatus_(
+                importStatusEnum_.SUCCEEDED, importStatus_)]]"
+            on-click="closeDialog_">$i18n{done}</cr-button>
+      </div>
+    </cr-dialog>
+  </template>
+  <script src="import_data_dialog.js"></script>
+</dom-module>

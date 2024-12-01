@@ -1,0 +1,216 @@
+<style include="cr-shared-style cr-icons">
+  #add-kiosk-app {
+    margin-bottom: 10px;
+    margin-top: 20px;
+  }
+
+  #add-kiosk-app cr-input {
+    width: 350px;
+  }
+
+  #add-kiosk-app cr-button {
+    margin-inline-start: 10px;
+  }
+
+  #kiosk-apps-list {
+    border: 1px solid var(--paper-grey-300);
+    padding: 10px;
+  }
+
+  .list-item {
+    align-items: center;
+    border-bottom: 1px solid var(--paper-grey-300);
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+  }
+
+  .list-item:last-of-type {
+    border-bottom: none;
+  }
+
+  .list-item:hover {
+    background-color: var(--paper-grey-300);
+  }
+
+  .item-icon {
+    vertical-align: middle;
+    width: 25px;
+  }
+
+  .item-controls {
+    visibility: hidden;
+  }
+
+  .list-item:hover .item-controls {
+    visibility: visible;
+  }
+
+  cr-icon-button {
+    margin: 0;
+  }
+  div[slot=button-container] {
+    justify-content:center;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    padding-inline-end: 10px;
+    padding-inline-start: 10px;
+  }
+  div[slot=body] {
+    padding: 0 10px;
+  }
+  div[slot=title] {
+    text-align: center;
+    font-weight: 500;
+    color: var(--cr-my-dialog-title-color);
+    line-height: 1.4286;
+    padding: 0;
+  }
+  cr-button {
+    width: 170px;
+    height: 36px;
+    font-weight: 500;
+  }
+  cr-button.cancel-button {
+    margin-inline-end: 20px;
+    color: var(--cr-input-font-color);
+    background: var(--cr-my-dialog-cancel-btn);
+    border: 1px solid var(--cr-my-dialog-cancel-btn-border-color);
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.05); 
+    position: relative;
+  }
+  cr-button.cancel-button:after {
+    display: block;
+    content: "";
+    width: 3px;
+    height: 28px;
+    border-right: 1px solid rgba(0,0,0,0.1);
+    position: absolute;
+    right: -12px;
+    top: 4px;
+  }
+  cr-button#done {
+    margin-inline-end: 20px;
+    color: #414d68;
+    background: linear-gradient(180deg,#e6e6e6, #e3e3e3 96%);
+    border: 1px solid rgba(0,0,0,0.03);
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.05); 
+  }
+  cr-button.action-button {
+    color: #fff;
+    background: var(--cr-my-dialog-save-btn);
+    border: 1px solid rgba(0,0,0,0.03);
+    border-radius: 8px;
+    box-shadow: 0px 4px 4px 0px var(--cr-my-dialog-save-btn-box-shadow);
+
+  }
+  .set-head{
+    display: flex;
+    height: 48px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    padding-right: 0;
+  }
+  .set-head .msg-icon{
+    width: 32px;
+    height: 32px;
+    background: url(chrome://resources/images/deepin_cloudprint_config_helper.svg) no-repeat center;
+    background-size: contain;
+  }
+  .set-head .close-icon{
+    width: 50px;
+    height: 50px;
+    background: var(--cr-my-dialog-close-normal) no-repeat center;
+    background-size: 11px;
+    margin: 0px;
+  }
+  .set-head .close-icon:hover {
+    background-color: rgba(0,0,0,0.05);
+    background-image: var(--cr-my-dialog-close-hover);
+  }
+  .set-head .close-icon:active {
+    background-color: rgba(0,0,0,0.05);
+    background-image: var(--cr-my-dialog-close-press);
+  }
+  cr-input:first-child {
+    margin-bottom: 10px;
+  }
+  cr-input:last-child {
+    margin-bottom: 0;
+  }
+</style>
+<cr-dialog id="dialog" close-text="$i18n{close}" extension="true"
+    ignore-enter-key>
+  <div slot="setting" class="set-head">
+    <div class="msg-icon"></div>
+    <div class="close-icon" on-click="onDoneTap_"></div>
+  </div>
+  <div slot="title">$i18n{manageKioskApp}</div>
+  <div slot="body">
+    <div id="kiosk-apps-list">
+      <template is="dom-repeat" items="[[apps_]]">
+        <div class="list-item">
+          <div class="item-name">
+            <img class="item-icon" src="[[item.iconURL]]"
+                alt$="[[appOrExtension(
+                    data.type,
+                    '$i18nPolymer{appIcon}',
+                    '$i18nPolymer{extensionIcon}')]]">
+            [[item.name]]
+            <span hidden="[[!item.autoLaunch]]">
+              $i18n{kioskAutoLaunch}
+            </span>
+          </div>
+          <div class="item-controls">
+            <cr-button hidden="[[!canEditAutoLaunch_]]"
+                on-click="onAutoLaunchButtonTap_">
+              [[getAutoLaunchButtonLabel_(item.autoLaunch,
+                  '$i18nPolymer{kioskDisableAutoLaunch}',
+                  '$i18nPolymer{kioskEnableAutoLaunch}')]]
+            </cr-button>
+            <cr-icon-button class="icon-delete-gray"
+                on-click="onDeleteAppTap_"></cr-icon-button>
+          </div>
+        </div>
+      </template>
+    </div>
+    <div id="add-kiosk-app">
+      <cr-input id="add-input" label="$i18n{kioskAddApp}"
+          placeholder="$i18n{kioskAddAppHint}" value="{{addAppInput_}}"
+          invalid="[[errorAppId_]]" on-keydown="clearInputInvalid_"
+          error-message="[[getErrorMessage_(
+              '$i18nPolymer{kioskInvalidApp}', errorAppId_)]]">
+        <cr-button id="add-button" on-click="onAddAppTap_"
+            disabled="[[!addAppInput_]]" slot="suffix">
+          $i18n{add}
+        </cr-button>
+      </cr-input>
+    </div>
+    <cr-checkbox disabled="[[!canEditBailout_]]" id="bailout"
+        on-change="onBailoutChanged_" checked="[[bailoutDisabled_]]"
+        hidden="[[!canEditAutoLaunch_]]">
+      $i18n{kioskDisableBailout}
+    </cr-checkbox>
+  </div>
+  <div slot="button-container">
+    <cr-button class="action-button" id="done" on-click="onDoneTap_">
+      $i18n{done}
+    </cr-button>
+  </div>
+</cr-dialog>
+<cr-dialog id="confirm-dialog" close-text="$i18n{close}" extension="true"
+    ignore-enter-key on-close="stopPropagation_">
+  <div slot="title">$i18n{kioskDisableBailoutWarningTitle}</div>
+  <div slot="body">$i18n{kioskDisableBailoutWarningBody}</div>
+  <div slot="button-container">
+    <cr-button class="cancel-button" on-click="onBailoutDialogCancelTap_">
+      $i18n{cancel}
+    </cr-button>
+    <cr-button class="action-button" on-click="onBailoutDialogConfirmTap_">
+      $i18n{confirm}
+    </cr-button>
+  </div>
+</cr-dialog>

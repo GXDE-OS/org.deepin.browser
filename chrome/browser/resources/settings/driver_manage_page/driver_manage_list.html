@@ -1,0 +1,103 @@
+<link rel="import" href="chrome://resources/html/polymer.html">
+
+<link rel="import" href="chrome://resources/cr_elements/shared_vars_css.html">
+<link rel="import" href="chrome://resources/polymer/v1_0/iron-list/iron-list.html">
+<link rel="import" href="../settings_shared_css.html">
+<link rel="import" href="../settings_vars_css.html">
+<link rel="import" href="driver_manage_entry.html">
+<link rel="import" href="driver_manage_browser_proxy.html">
+
+<dom-module id="settings-driver-manage-list">
+  <template>
+    <style include="settings-shared">
+      #headers {
+        display: flex;
+        padding: 4px 0;
+        box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.1); 
+        color: #414d68;
+        font-weight: 500;
+      }
+      #headers div{
+        border-left: 1px solid rgba(0,0,0,0.1);;
+        padding-left: 6px;
+        box-sizing: border-box;
+        line-height: 2;
+      }
+      #headers div:first-child{
+        border: none;
+      }
+      #headers .name{
+        flex: 32;
+      }
+      #headers .url {
+        flex: 54;
+      }
+      #outer {
+        @apply --settings-list-frame-padding;
+        padding-left: 0;
+        margin-bottom: 10px;
+        padding-right: 0;
+        margin-top: 10px;
+      }
+
+      settings-driver-manage-entry {
+        /* border-top: var(--cr-separator-line); */
+        /* padding-left: 7px; */
+        border-radius: 8px;
+        /* margin-top: 1px; */
+      }
+      settings-driver-manage-entry:nth-child(even){
+        background: rgba(0,0,0,0.03) !important;
+      }
+
+      :host([fixed-height]) #container {
+        /* Max items we show before scrolling is 6. Adding a 7th item to the
+         * list will add a scroll bar to the container. */
+        max-height: calc((var(--settings-row-min-height) +
+                          var(--cr-separator-height)) * 6);
+      }
+
+      .icon-placeholder {
+        margin-inline-end: 0;
+        margin-inline-start: var(--cr-icon-button-margin-start);
+        width: var(--cr-icon-ripple-size);
+        border: none !important;
+        padding-left: 0;
+        margin-left:24px;
+      }
+      .url:after {
+        width: 1px;
+        content: '';
+        display: block;
+        height: 100%;
+        background: rgba(255,255,255,0.6);
+        left: -6px;
+        top: 0;
+      }
+      iron-list{
+        margin-top: 1px;
+      }
+    </style>
+    <div id="outer">
+      <!-- <div class="list">list</div> -->
+      <div id="headers" class="column-header">
+        <div class="name">$i18n{usbkeydriverManagerDriverName}</div>
+        <div class="url">$i18n{usbkeydriverManagerDriverPath}</div>
+        <div class="icon-placeholder"></div>
+      </div>
+      <div id="container" class="scroll-container"
+          scrollable$="[[fixedHeight]]">
+        <iron-list items="[[driver]]" preserve-focus risk-selection>
+          <template>
+            <settings-driver-manage-entry engine="[[item]]"
+                focus-row-index="[[index]]"
+                tabindex$="[[tabIndex]]" iron-list-tab-index="[[tabIndex]]"
+                last-focused="{{lastFocused_}}" list-blurred="{{listBlurred_}}">
+            </settings-driver-manage-entry>
+          </template>
+        </iron-list>
+      </div>
+    </div>
+  </template>
+  <script src="driver_manage_list.js"></script>
+</dom-module>
