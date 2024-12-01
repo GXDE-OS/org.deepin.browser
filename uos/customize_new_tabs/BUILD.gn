@@ -1,0 +1,16 @@
+static_library("customize_new_tabs") {
+  output_name = "uos_customize_new_tabs"
+
+  public_deps = [
+    "//base",
+
+  ]
+    
+  sources = [
+    "customize_newtabs_core.h",
+    "customize_newtabs_core.cc",
+    "newtabs_thread_manager.h",
+    "newtabs_thread_manager.cc",
+
+  ]
+}

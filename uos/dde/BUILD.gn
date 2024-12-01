@@ -1,0 +1,31 @@
+# Copyright 2019 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+component("dde") {
+  output_name = "uos_dde"
+  defines = [ "IS_UOS_DBUS_IMPL" ]
+
+  public_deps = [
+    "//dbus",
+    "//skia",
+  ]
+    
+  sources = [
+    "dde_constants.h",
+    "dde_appearance_color_client.cc",
+    "dde_appearance_color_client.h",
+    "dde_appearance_theme_client.cc",
+    "dde_appearance_theme_client.h",
+    "dde_vm_compositing_client.cc",
+    "dde_vm_compositing_client.h",
+    "dde_password_auth_client.h",
+    "dde_password_auth_client.cc",
+    "dde_mime_client.cc",
+    "dde_mime_client.h",
+    "dde_help_client.cc",
+    "dde_help_client.h",
+    "dde_manual_util.h",
+    "dde_manual_util.cc"
+  ]
+}

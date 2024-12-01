@@ -1,0 +1,23 @@
+# Copyright 2019 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+component("database") {
+  output_name = "uos_database"
+  defines = [ "IS_UOS_DATABASE_IMPL" ]
+
+  public_deps = [
+    "//base",
+    "//sql",
+    "//chrome:strings",
+  ]
+    
+  sources = [
+    "database_thread_manager.h",
+    "database_thread_manager.cc",
+    "database_clients_browser.h",
+    "database_clients_browser.cc",
+    "risky_urls_database.h",
+    "risky_urls_database.cc"  
+  ]
+}
