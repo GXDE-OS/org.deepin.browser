@@ -1,0 +1,68 @@
+<link rel="import" href="chrome://resources/html/polymer.html">
+
+<link rel="import" href="chrome://resources/cr_elements/cr_button/cr_button.html">
+<link rel="import" href="chrome://resources/html/assert.html">
+<link rel="import" href="chrome://resources/html/i18n_behavior.html">
+<link rel="import" href="chrome://resources/html/load_time_data.html">
+<link rel="import" href="chrome://resources/polymer/v1_0/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="certificate_entry.html">
+<link rel="import" href="certificate_manager_types.html">
+<link rel="import" href="certificate_shared_css.html">
+<link rel="import" href="certificates_browser_proxy.html">
+
+<dom-module id="certificate-list">
+  <template>
+    <style include="certificate-shared iron-flex">
+      .button-box {
+        align-items: center;
+        display: flex;
+        margin-bottom: 10px;
+        min-height: 36px;
+        /* padding: 0 20px; */
+      }
+
+      /* TODO(aee): add platform conditional after crbug/964506 is fixed. */
+      #importAndBind {
+        margin-inline-start: 8px;
+      }
+      #import{
+        width: 80px;
+        height: 36px;
+        background: var(--cr-my-dialog-cancel-btn);
+        border: 1px solid var(--cr-my-dialog-cancel-btn-border-color);
+        border-radius: 8px;
+        box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.05); 
+        font-weight: 500;
+        color: var(--cr-toolbar-search-field-prompt-color);
+      }
+      .no-data {
+        color: var(--setting-passwd-nodata-label-color);
+      }
+      certificate-entry:nth-child(even) {
+        --certificate-entryy-background-color: var(--setting-link-row-background-color);
+      }
+      certificate-entry:nth-child(odd) {
+        --certificate-entryy-background-color: var(--setting-passwd-odd-background-color);
+      }
+    </style>
+    <div class="button-box">
+      <span class$="flex [[myColor]]">
+          [[getDescription_(certificateType, certificates)]]</span>
+      <cr-button id="import" on-click="onImportTap_"
+          hidden="[[!canImport_(certificateType, importAllowed, isKiosk_)]]">
+        [[i18n('certificateManagerImport')]]</cr-button>
+<if expr="chromeos">
+      <cr-button id="importAndBind" on-click="onImportAndBindTap_"
+          hidden="[[!canImportAndBind_(certificateType, importAllowed,
+                 isGuest_)]]">
+        [[i18n('certificateManagerImportAndBind')]]</cr-button>
+</if>
+    </div>
+    <template is="dom-repeat" items="[[certificates]]">
+      <certificate-entry model="[[item]]"
+          certificate-type="[[certificateType]]">
+      </certificate-entry>
+    </template>
+  </template>
+  <script src="certificate_list.js"></script>
+</dom-module>

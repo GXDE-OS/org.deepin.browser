@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>zoom</title>
+    <g id="主界面-0819" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="设置-隐私安全" transform="translate(-520.000000, -1642.000000)">
+            <g id="编组-8" transform="translate(460.000000, 201.000000)">
+                <g id="编组-7">
+                    <g id="编组-25" transform="translate(40.000000, 16.000000)">
+                        <g id="编组-2备份-35" transform="translate(0.000000, 1408.000000)">
+                            <g id="zoom" transform="translate(20.000000, 17.000000)">
+                                <g id="编组-22" transform="translate(3.000000, 4.000000)" stroke="#626E88">
+                                    <line x1="11.25" y1="11.25" x2="15.5" y2="15.5" id="直线-2" stroke-width="1.6" stroke-linecap="round"></line>
+                                    <circle id="椭圆形" stroke-width="1.7" cx="6.42857143" cy="6.42857143" r="5.57857143"></circle>
+                                </g>
+                                <polygon id="+" fill="#626E88" fill-rule="nonzero" points="10.2 13.07 10.2 11.186 12.07 11.186 12.07 9.87 10.2 9.87 10.2 8 8.884 8 8.884 9.87 7 9.87 7 11.186 8.884 11.186 8.884 13.07"></polygon>
+                                <polygon id="Stroke-1" stroke-opacity="0.00784313771" stroke="#000000" stroke-width="1.33333335e-11" points="0 0 23.9999985 0 23.9999985 23.9999985 0 23.9999985"></polygon>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,95 @@
+<link rel="import" href="chrome://resources/html/polymer.html">
+
+<link rel="import" href="chrome://resources/cr_elements/cr_button/cr_button.html">
+<link rel="import" href="chrome://resources/cr_elements/cr_dialog/cr_dialog.html">
+<link rel="import" href="chrome://resources/html/i18n_behavior.html">
+<link rel="import" href="chrome://resources/html/load_time_data.html">
+<link rel="import" href="certificates_browser_proxy.html">
+<link rel="import" href="certificate_shared_css.html">
+
+<dom-module id="certificates-error-dialog">
+  <template>
+    <style include="certificate-shared">
+      .set-head{
+        display: flex;
+        height: 48px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 10px;
+        padding-right: 0;
+      }
+      .ms-title{
+        line-height: 1.43;
+        text-align: center;
+        padding: 0;
+        font-size: 100%;
+      }
+      .set-head .msg-icon{
+        width: 32px;
+        height: 32px;
+        background: url(chrome://resources/images/deepin_cloudprint_config_helper.svg) no-repeat center;
+        background-size: contain;
+      }
+      .set-head .close-icon{
+        width: 50px;
+        height: 50px;
+        background: var(--cr-my-dialog-close-normal) no-repeat center;
+        margin: 0;
+        background-size: 11px;
+      }
+      .set-head .close-icon:hover{
+        background: var(--cr-my-dialog-close-hover) no-repeat center;
+        background-size: 11px;
+        background-color: rgba(0,0,0,0.05);
+      }
+      .set-head .close-icon:active{
+        background: var(--cr-my-dialog-close-press) no-repeat center;
+        background-size: 11px;
+        background-color: rgba(0,0,0,0.05);
+      }
+      .ms-body{
+        text-align: center;
+        line-height: 1.43;
+        margin-top: 5px;
+      }
+      cr-button{
+        width: 100%;
+        height: 36px;
+        background: var(--cr-my-dialog-cancel-btn);
+        border: 1px solid var(--cr-my-dialog-cancel-btn-border-color);
+        border-radius: 8px;
+        box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.05);
+        color: var(--cr-toolbar-search-field-prompt-color);
+      }
+      .ms-container{
+        padding-top: 18px;
+        padding-bottom: 10px;
+      }
+      cr-dialog{
+        --cr-dialog-top-container-min-height:0;
+        --cr-my-container-overflow:auto;
+      }
+    </style>
+    <cr-dialog id="dialog" close-text="[[i18n('close')]]">
+      <div slot="setting" class="set-head">
+        <div class="msg-icon"></div>
+        <div class="close-icon" on-click="onOkTap_"></div>
+      </div>
+      <div slot="title" class="ms-title">[[model.title]]</div>
+      <div slot="body" class="ms-body">
+        <div>[[model.description]]</div>
+        <template is="dom-if" if="[[model.certificateErrors]]">
+          <template is="dom-repeat" items="[[model.certificateErrors]]">
+            <div>[[getCertificateErrorText_(item)]]</div>
+          </template>
+        </template>
+      </div>
+      <div slot="button-container" class="ms-container">
+        <cr-button id="ok" class="action-button" on-click="onOkTap_">
+          [[i18n('ok')]]
+        </cr-button>
+      </div>
+    </cr-dialog>
+  </template>
+  <script src="certificates_error_dialog.js"></script>
+</dom-module>

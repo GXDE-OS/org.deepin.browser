@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>show_checked</title>
+    <g id="主界面" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="切图" transform="translate(-978.000000, -1328.000000)" fill="#FFFFFF">
+            <g id="show备份" transform="translate(978.000000, 1328.000000)">
+                <g id="显示设备" transform="translate(3.000000, 4.000000)">
+                    <path d="M3.5,15.2 C3.22385763,15.2 3,14.9761424 3,14.7 L3,14.5 C3,14.2238576 3.22385763,14 3.5,14 L7.799,14 L7.8,12.8 L1.8,12.8 C1.1372583,12.8 0.6,12.2627417 0.6,11.6 L17.4,11.6 C17.4,12.2627417 16.8627417,12.8 16.2,12.8 L10.2,12.8 L10.199,14 L14.5,14 C14.7761424,14 15,14.2238576 15,14.5 L15,14.7 C15,14.9761424 14.7761424,15.2 14.5,15.2 L3.5,15.2 Z M15.4,0.8 C16.5045695,0.8 17.4,1.6954305 17.4,2.8 L17.4,10.4 L0.6,10.4 L0.6,2.8 C0.6,1.6954305 1.4954305,0.8 2.6,0.8 L15.4,0.8 Z" id="形状结合"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

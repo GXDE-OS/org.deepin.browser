@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128px" height="128px" viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>progress 2</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#55C600" offset="0%"></stop>
+            <stop stop-color="#00C3B6" offset="100%"></stop>
+        </linearGradient>
+        <path d="M64,112.76556 C91.0619527,112.76556 113,90.8730275 113,63.8672199 C113,36.8614123 91.0619527,14.9688797 64,14.9688797 C36.9380473,14.9688797 15,36.8614123 15,63.8672199 C15,90.8730275 36.9380473,112.76556 64,112.76556 Z" id="path-2"></path>
+        <filter x="-12.2%" y="-6.1%" width="124.5%" height="124.5%" filterUnits="objectBoundingBox" id="filter-3">
+            <feOffset dx="0" dy="6" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0.835294118   0 0 0 0 0.270588235  0 0 0 0.3 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="浅色主题" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="转换成功" transform="translate(-336.000000, -249.000000)">
+            <g id="编组" transform="translate(90.000000, 93.000000)">
+                <g id="progress-2" transform="translate(246.000000, 156.000000)">
+                    <g id="编组" transform="translate(0.000000, -0.000000)">
+                        <g id="progress" transform="translate(0.000000, -0.000000)">
+                            <g id="Combined-Shape">
+                                <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-2"></use>
+                                <use fill="url(#linearGradient-1)" fill-rule="evenodd" xlink:href="#path-2"></use>
+                            </g>
+                            <path d="M53.4382219,78.82065 C56.4382919,82.0592317 61.2950661,82.0432964 64.2836706,78.7877375 L90.7817734,49.9227162 C91.9009716,48.7035466 91.8178741,46.8098072 90.5961698,45.692931 C89.3744656,44.5760547 87.4767891,44.6589799 86.3575909,45.8781495 L60.2379093,74.4022326 C59.4906657,75.2182623 58.2701534,75.2161594 57.5206665,74.4070867 L43.2029373,58.9510687 C42.0782368,57.7369521 40.1802046,57.6625745 38.9635639,58.7849417 C37.7469232,59.9073088 37.672391,61.8014031 38.7970915,63.0155197 L53.4382219,78.82065 Z" id="Path-119" fill="#FFFFFF" fill-rule="nonzero"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

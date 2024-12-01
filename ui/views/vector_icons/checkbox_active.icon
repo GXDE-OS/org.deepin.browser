@@ -1,0 +1,27 @@
+// Copyright 2016 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+// From checkbox_on.svg sha1sum = cee25747ce476051021b563ce9e860a82a361352
+
+CANVAS_DIMENSIONS, 18,
+MOVE_TO, 15.75f, 0.61f,
+R_ARC_TO, 1.25f, 1.25f, 0, 0, 1, 1.94f, 1.58f,
+R_LINE_TO, -1.94f, 2.4f,
+R_CUBIC_TO, 0.17f, 0.44f, 0.26f, 0.91f, 0.26f, 1.41f,
+R_V_LINE_TO, 8.01f,
+ARC_TO, 4, 4, 0, 0, 1, 12, 18,
+H_LINE_TO, 4,
+ARC_TO, 4, 4, 0, 0, 1, 0, 14,
+V_LINE_TO, 6,
+ARC_TO, 4, 4, 0, 0, 1, 4, 2,
+R_H_LINE_TO, 8.01f,
+R_CUBIC_TO, 0.78f, 0, 1.51f, 0.22f, 2.13f, 0.61f,
+R_LINE_TO, -8.06f, 9.96f,
+R_LINE_TO, -2.14f, -2.39f,
+R_ARC_TO, 1.25f, 1.25f, 0, 0, 0, -1.86f, 1.67f,
+R_LINE_TO, 3.12f, 3.49f,
+R_ARC_TO, 1.25f, 1.25f, 0, 0, 0, 1.9f, -0.04f,
+R_LINE_TO, 8.66f, -10.7f,
+R_ARC_TO, 4.01f, 4.01f, 0, 0, 0, -1.62f, -1.98f,
+CLOSE

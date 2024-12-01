@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Try job for v8: enable TurboProp",
+    "target": "performance_test_suite",
+    "configuration": "android-go-perf",
+    "benchmark": "v8.browsing_mobile",
+    "story_tags": "emerging_market",
+    "patch": "https://chromium-review.googlesource.com/c/v8/v8/+/1784285",
+    "repository": "chromium"
+  },
+  {
+    "name": "Try job for v8: enable TurboProp",
+    "target": "performance_test_suite",
+    "configuration": "android-go-perf",
+    "benchmark": "speedometer2",
+    "story": "Speedometer2",
+    "patch": "https://chromium-review.googlesource.com/c/v8/v8/+/1784285",
+    "repository": "chromium"
+  }
+]

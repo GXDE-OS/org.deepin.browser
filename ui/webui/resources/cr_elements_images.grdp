@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grit-part>
+  <!-- TODO(dschuyler): Many of these may be included for the unit tests which
+       don't appear to flatten the html. We may be able to avoid including
+       these if the browser_tests would not try to load them. -->
+  <include name="IDR_WEBUI_IMAGES_200_LOGO_GOOGLE_G"
+           file="images/200-logo_googleg.png" type="BINDATA" compress="gzip" />
+  <include name="IDR_WEBUI_IMAGES_ARROW_DOWN"
+           file="images/arrow_down.svg" type="BINDATA" compress="gzip" />
+  <include name="IDR_WEBUI_IMAGES_ARROW_RIGHT"
+           file="images/arrow_right.svg" type="BINDATA" compress="gzip" />
+  <include name="IDR_WEBUI_IMAGES_DARK_ARROW_DOWN"
+           file="images/dark/arrow_down.svg" type="BINDATA" compress="gzip" />
+  <include name="IDR_WEBUI_IMAGES_DARK_ICON_SEARCH"
+           file="images/dark/icon_search.svg" type="BINDATA" compress="gzip" />
+  <include name="IDR_WEBUI_IMAGES_ICON_ARROW_BACK"
+           file="images/icon_arrow_back.svg" type="BINDATA" compress="gzip" />
+  <include name="IDR_WEBUI_IMAGES_ICON_ARROW_DROPDOWN"
+           file="images/icon_arrow_dropdown.svg" type="BINDATA"
+           compress="gzip" />
+  <include name="IDR_WEBUI_IMAGES_ICON_CANCEL"
+           file="images/icon_cancel.svg" type="BINDATA" compress="gzip" />
+  <include name="IDR_WEBUI_IMAGES_ICON_CLEAR"
+           file="images/icon_clear.svg" type="BINDATA" compress="gzip" />
+  <include name="IDR_WEBUI_IMAGES_ICON_DELETE_GRAY"
+           file="images/icon_delete_gray.svg" type="BINDATA" compress="gzip" />
+  <include name="IDR_WEBUI_IMAGES_ICON_EXPAND_LESS"
+           file="images/icon_expand_less.svg" type="BINDATA" compress="gzip" />
+  <include name="IDR_WEBUI_IMAGES_ICON_EXPAND_LESS_DARK"
+           file="images/icon_expand_less_dark.svg" type="BINDATA" compress="gzip" />
+  <include name="IDR_WEBUI_IMAGES_ICON_EXPAND_MORE"
+           file="images/icon_expand_more.svg" type="BINDATA" compress="gzip" />
+  <include name="IDR_WEBUI_IMAGES_ICON_EXPAND_MORE_DARK"
+           file="images/icon_expand_more_dark.svg" type="BINDATA" compress="gzip" />
+  <include name="IDR_WEBUI_IMAGES_ICON_EXTERNAL"
+           file="images/open_in_new.svg" type="BINDATA" compress="gzip" />
+  <include name="IDR_WEBUI_IMAGES_ICON_MORE_VERT"
+           file="images/list_more_normal.svg" type="BINDATA" compress="gzip" />
+  <include name="IDR_WEBUI_IMAGES_ICON_PICTURE_DELETE"
+           file="images/icon_picture_delete.svg" type="BINDATA"
+           compress="gzip" />
+  <include name="IDR_WEBUI_IMAGES_ICON_REFRESH"
+           file="images/icon_refresh.svg" type="BINDATA" compress="gzip" />
+  <include name="IDR_WEBUI_IMAGES_ICON_SEARCH"
+           file="images/icon_search.svg" type="BINDATA" compress="gzip" />
+  <include name="IDR_WEBUI_IMAGES_ICON_SETTINGS"
+           file="images/icon_settings.svg" type="BINDATA" compress="gzip" />
+  <include name="IDR_WEBUI_IMAGES_ICON_VISIBILITY"
+           file="images/icon_visibility.svg" type="BINDATA" compress="gzip" />
+  <include name="IDR_WEBUI_IMAGES_ICON_VISIBILITY_OFF"
+           file="images/icon_visibility_off.svg" type="BINDATA"
+           compress="gzip" />
+  <include name="IDR_WEBUI_IMAGES_ICON_COPY_CONTENT"
+           file="images/icon_copy_content.svg" type="BINDATA"
+           compress="gzip" />
+  <include name="IDR_WEBUI_IMAGES_OPEN_IN_NEW"
+           file="images/open_in_new.svg" type="BINDATA" compress="gzip" />
+<!-- 新增 -->
+  <include name="IDR_WEBUI_IMAGES_EXPAND_ARROW"
+           file="images/expand_arrow.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_IMAGES_COMBOBOX_ARROW"
+           file="images/combobox_arrow.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_IMAGES_COMBOBOX_ARROW_DARK"
+           file="images/combobox_arrow_dark.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_IMAGES_LIST_MORE_NORMAL"
+           file="images/list_more_normal.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_IMAGES_BUTTON_TAB_CLOSE_NORMAL"
+           file="images/button_tab_close_normal.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_IMAGES_BUTTON_TAB_CLOSE_NORMAL_DARK"
+           file="images/button_tab_close_normal_dark.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_IMAGES_SET_DELETE"
+           file="images/set_delete.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_IMAGES_SET_DELETE_DARK"
+           file="images/set_delete_dark.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_IMAGES_ARROW"
+           file="images/arrow.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_IMAGES_ARROW_DARK"
+           file="images/arrow_dark.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_NEW_ICON_SITE"
+           file="images/new_icon_site.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_CHECKBOX_UNCHECKED"
+           file="images/checkbox_unchecked.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_CHECKBOX_UNCHECKED_DARK"
+           file="images/checkbox_unchecked_dark.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_CHECKBOX_CHECKED"
+           file="images/checkbox_checked.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_CHECKBOX_CHECKED_DARK"
+           file="images/checkbox_checked_dark.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_NOTIFICATION_NETWORK"
+           file="images/notification_network.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_LINE_BAR"
+           file="images/line_bar.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_BUTTON_TAB_CANCEL"
+           file="images/button_tab_cancel.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_BUTTON_TAB_CANCEL_DARK"
+           file="images/button_tab_cancel_dark.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_CONFIG_HELPER"
+           file="images/deepin_cloudprint_config_helper.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_T_RIGHT"
+           file="images/t_right.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_SLIDER_ALL"
+           file="images/slider_all.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_SLIDER_ALL_DARK"
+           file="images/slider_all_dark.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_PROGRESS_SUCCESS"
+           file="images/progress_success.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_ICON_ARROW_BACK"
+           file="images/icon_arrow_back.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_ICON_ARROW_BACK_DARK"
+           file="images/icon_arrow_back_dark.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_BUTTON_TAB_CLOSE_NORMAL"
+           file="images/button_tab_close_normal.svg" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_BUTTON_TAB_CLOSE_NORMAL_DARK"
+           file="images/button_tab_close_normal_dark.svg" type="BINDATA" compress="gzip" />
+<!-- <include name="IDR_WEBUI_IMAGES_ARROW_LEFT"
+           file="images/notification_network_wireless_full.png" type="BINDATA" compress="gzip" />
+<include name="IDR_WEBUI_IMAGES_DEEPIN_CLOUDPRINT_CONFIG_HELPER"
+           file="images/deepin_cloudprint_config_helper.svg" type="BINDATA" compress="gzip" />           -->
+</grit-part>

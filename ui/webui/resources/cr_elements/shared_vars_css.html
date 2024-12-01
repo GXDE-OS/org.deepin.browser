@@ -1,0 +1,367 @@
+<link rel="import" href="../html/polymer.html">
+
+<link rel="import" href="chrome://resources/polymer/v1_0/paper-styles/color.html">
+
+<!-- Common css variables for Material Design WebUI. -->
+<custom-style>
+<style is="custom-style">
+  html {
+    --google-blue-50-rgb: 232, 240, 254;  /* #e8f0fe */
+    --google-blue-50: rgb(var(--google-blue-50-rgb));
+    --google-blue-200-rgb: 174, 203, 250;  /* #aecbfa */
+    --google-blue-200: rgb(var(--google-blue-200-rgb));
+    --google-blue-600-rgb: 26, 115, 232;  /* #1a73e8 */
+    --google-blue-600: rgb(var(--google-blue-600-rgb));
+
+    --google-grey-200-rgb: 232, 234, 237;  /* #e8eaed */
+    --google-grey-200: rgb(var(--google-grey-200-rgb));
+    --google-grey-400-rgb: 189, 193, 198;  /* #bdc1c6 */
+    --google-grey-400: rgb(var(--google-grey-400-rgb));
+    --google-grey-600-rgb: 128, 134, 139;  /* #80868b */
+    --google-grey-600: rgb(var(--google-grey-600-rgb));
+    --google-grey-800-rgb: 60, 64, 67;  /* #3c4043 */
+    --google-grey-800: rgb(var(--google-grey-800-rgb));
+    --google-grey-900-rgb: 32, 33, 36;  /* #202124 */
+    --google-grey-900: rgb(var(--google-grey-900-rgb));
+    /* --google-grey-900 + 4% white blended together. */
+    --google-grey-900-white-4-percent: #292a2d;
+
+    --google-red-600-rgb: 217, 48, 37;  /* #d93025 */
+    --google-red-600: rgb(var(--google-red-600-rgb));
+
+    /* -refresh differentiate from polymer's color.html. */
+    --google-blue-refresh-100-rgb: 210, 227, 252;  /* #d2e3fc */
+    --google-blue-refresh-100: rgb(var(--google-blue-refresh-100-rgb));
+    --google-blue-refresh-300-rgb: 138, 180, 248;  /* #8ab4f8 */
+    --google-blue-refresh-300: rgb(var(--google-blue-refresh-300-rgb));
+    --google-blue-refresh-500-rgb: 66, 133, 244;  /* #4285f4 */
+    --google-blue-refresh-500: rgb(var(--google-blue-refresh-500-rgb));
+    --google-blue-refresh-700-rgb: 25, 103, 210;  /* #1966d2 */
+    --google-blue-refresh-700: rgb(var(--google-blue-refresh-700-rgb));
+
+    --google-green-refresh-300-rgb: 129, 201, 149;  /* #81c995 */
+    --google-green-refresh-300: rgb(var(--google-green-refresh-300-rgb));
+    --google-green-refresh-700-rgb: 24, 128, 56;  /* #188038 */
+    --google-green-refresh-700: rgb(var(--google-green-refresh-700-rgb));
+
+    --google-grey-refresh-100-rgb: 241, 243, 244;  /* #f1f3f4 */
+    --google-grey-refresh-100: rgb(var(--google-grey-refresh-100-rgb));
+    --google-grey-refresh-300-rgb: 218, 220, 224;  /* #dadce0 */
+    --google-grey-refresh-300: rgb(var(--google-grey-refresh-300-rgb));
+    --google-grey-refresh-500-rgb: 154, 160, 166;  /* #9aa0a6 */
+    --google-grey-refresh-500: rgb(var(--google-grey-refresh-500-rgb));
+    --google-grey-refresh-700-rgb: 95, 99, 104;  /* #5f6368 */
+    --google-grey-refresh-700: rgb(var(--google-grey-refresh-700-rgb));
+
+    --google-red-refresh-300-rgb: 242, 139, 130;  /* #f28b82 */
+    --google-red-refresh-300: rgb(var(--google-red-refresh-300-rgb));
+    --google-red-refresh-500-rgb: 234, 67, 53;  /* #ea4335 */
+    --google-red-refresh-500: rgb(var(--google-red-refresh-500-rgb));
+
+    --google-yellow-refresh-300-rgb: 253, 214, 51;  /* #fdd633 */
+    --google-yellow-refresh-300: rgb(var(--google-yellow-refresh-300-rgb));
+
+    --cr-secondary-text-color: var(--google-grey-refresh-700);
+
+    --cr-card-background-color: white;
+    --cr-card-shadow-color-rgb: var(--google-grey-800-rgb);
+
+    --cr-card-shadow: rgba(var(--cr-card-shadow-color-rgb), .3) 0 1px 2px 0,
+                      rgba(var(--cr-card-shadow-color-rgb), .15) 0 1px 3px 1px;
+
+    --cr-checked-color: var(--google-blue-600);
+    --cr-focused-item-color: var(--google-grey-300);
+    --cr-form-field-label-color: var(--google-grey-refresh-700);
+    --cr-hairline-rgb: 0, 0, 0;
+    --cr-link-color: var(--google-blue-700);
+    --cr-menu-background-color: white;
+    --cr-separator-color: rgba(255, 255, 255, 1);
+    --cr-toggle-color: var(--google-blue-500);
+    --cr-toolbar-background-color: var(--google-blue-700);
+
+    /* light */
+    --cr-list-color: #efefef;
+    --cr-toolbar-bg-color: rgba(255, 255, 255, 0.8);
+    --cr-toolbar-font-color: #001a2e;
+    --cr-toolbar-search-bg-color: rgba(0, 0, 0, 0.1);
+    --cr-toolbar-search-field-prompt-color: #414d68;
+    --cr-toolbar-button-cancel-color: white;
+    --cr-toolbar-selection-background-color: white;
+    --cr-toolbar-border-bottom-color: white;
+    --cr-toolbar-box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.1), 0px 1px 0px 0px rgba(255,255,255,0.6) inset;
+    --cr-sidebar-background-color: var(--cr-list-color);
+    --cr-sidebar-active-background-color: #0081ff;
+    --cr-sidebar-active-hover-background-color: rgba(0, 129, 255, 0.8);
+    --cr-sidebar-active-box-shadow: rgba(44, 167, 248, 0.4);
+    --cr-iron-background-color: white;
+    --cr-iron-no-result-font-color: rgba(85, 85, 85, 0.4);
+    --cr-icon-button-fill-color: var(--google-grey-refresh-700);
+    --cr-primary-text-color: var(--google-grey-900);
+
+    --cr-menu-background-focus-color: var(--cr-sidebar-active-background-color);
+    --cr-menu-btn-icon-img: url(chrome://theme/IDR_HISTORY_MORE);
+    --cr-menu-background-img: url(chrome://theme/MENU_BG);
+    --cr-menu-background-sheen: transparent;
+    --cr-menu-shadow: 0 2px 6px var(--paper-grey-500);
+
+    --cr-my-dialog-background-color: white;
+    --cr-my-dialog-title-color: rgba(0,0,0,0.9);
+    --cr-my-dialog-close-normal: url(chrome://theme/CANCEL_NORMAL);
+    --cr-my-dialog-close-hover: url(chrome://theme/CANCEL_HOVER);
+    --cr-my-dialog-close-press: url(chrome://theme/CANCEL_PRESS);
+    --cr-my-dialog-save-btn: linear-gradient(180deg,#25b7ff, #0098ff);
+    --cr-my-dialog-save-btn-box-shadow: rgba(0, 145, 255, 0.3);
+    --cr-my-dialog-cancel-btn: linear-gradient(180deg,#e6e6e6, #e3e3e3 96%);
+    --cr-my-dialog-cancel-btn-border-color: rgba(0, 0, 0, 0.03);
+    --cr-my-dialog-line-color: rgba(0, 0, 0, 0.1);
+    --cr-my-dialog-tips-color: var(--google-grey-refresh-700); 
+    
+    --cr-input-show-background-color: rgba(0,0,0,0.08);
+    --cr-input-font-color: #414d68;
+    --cr-input-placeholder-color: rgba(85, 85, 85, 0.4);
+    --cr-input-readonly-color: #8AA1B4;
+    --cr-input-error-background-color: #FDE2E1;
+    --cr-input-error-tips-background-color: white;
+    --cr-input-error-line-color: white;
+    --cr-input-error-border-color: rgba(0, 0, 0, 0.1);
+    --cr-input-search-icon: url(chrome://theme/SEARCH_ICON_DARK);
+
+    --cr-toggle-background-color: #ebebeb;
+    --cr-toggle-checked-background-color: #d3d3d3;
+    --cr-toggle-checked-opacity: 0.5;
+    --cr-toggle-knob-background-color: #8c8c8c;
+    --cr-toggle-knob-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .4);
+
+    --cr-radio-unchecked-boder-color: var(--google-grey-refresh-700);
+    --cr-radio-unchecked-background-color: white;
+    --cr-arrow-back-icon: url(chrome://resources/images/icon_arrow_back.svg);
+    --cr-tab-cancel-icon: url(chrome://resources/images/button_tab_cancel.svg);
+    --cr-checkbox-icon: url(chrome://resources/images/checkbox_unchecked.svg);
+    --cr-checkbox-checked-icon: url(chrome://resources/images/checkbox_checked.svg);
+    --cr-expand-less-icon: url(chrome://resources/images/icon_expand_less.svg);
+    --cr-expand-more-icon: url(chrome://resources/images/icon_expand_more.svg);
+    --cr-expand-right-icon: url(chrome://resources/images/arrow.svg);
+    --cr-delete-set-icon: url(chrome://resources/images/set_delete.svg);
+    --cr-link-row-sub-label-color: #526a7f;
+    --cr-link-row-icon-color: var(--google-grey-refresh-700);
+
+    --cr-scrollbar: {
+      background-color: #f1f3f4;
+    };
+    --cr-scrollbar-thumb: {
+      border-radius: 4px;
+      background-color: #c1c3c3;
+    };
+  }
+
+  @media (prefers-color-scheme: dark) {
+    html {
+      --cr-primary-text-color: var(--google-grey-200);
+      --cr-secondary-text-color: var(--google-grey-refresh-500);
+
+      --cr-card-background-color: var(--google-grey-900-white-4-percent);
+      --cr-card-shadow-color-rgb: 0, 0, 0;
+
+      --cr-checked-color: var(--google-blue-refresh-300);
+      --cr-form-field-label-color: var(--dark-secondary-color);
+      --cr-hairline-rgb: 255, 255, 255;
+      --cr-link-color: var(--google-blue-refresh-300);
+      --cr-menu-background-color: var(--google-grey-900);
+      --cr-menu-background-focus-color: rgba(var(--google-grey-800-rgb), .6);
+      --cr-menu-background-sheen: rgba(255, 255, 255, .06);  /* Only dark mode. */
+      --cr-menu-shadow: rgba(0, 0, 0, .3) 0 1px 2px 0,
+                        rgba(0, 0, 0, .15) 0 3px 6px 2px;
+      --cr-separator-color: rgba(255, 255, 255, .1);
+      /* TODO(dbeam): --cr-toggle-color (CrOS only). */
+      --cr-toolbar-background-color: var(--google-grey-900-white-4-percent);
+    }
+  }
+
+  /* Don't use color values past this point. Instead, create a variable that's
+   * set for both light and dark modes and use a single variable below. */
+
+  html {
+    --cr-button-edge-spacing: 12px;
+    --cr-button-height: 32px;
+
+    /* Spacing between policy (controlledBy) indicator and control. */
+    --cr-controlled-by-spacing: 24px;
+
+    /* Default max-width for input fields */
+    --cr-default-input-max-width: 264px;
+
+    /* The inner icon is 20px in size. The button has 8px * 2 padding. */
+    --cr-icon-ripple-size: 36px;
+    --cr-icon-ripple-padding: 8px;
+
+    --cr-icon-size: 20px;
+
+    --cr-icon-button-margin-start: 16px;
+
+    --cr-icon-ripple-margin: calc(var(--cr-icon-ripple-padding) * -1);
+
+    --cr-paper-icon-button-margin: {
+      /* Shift button so ripple overlaps the end of the row. */
+      margin-inline-end: var(--cr-icon-ripple-margin);
+      margin-inline-start: var(--cr-icon-button-margin-start);
+    }
+
+    --cr-secondary-text: {
+      color: var(--cr-secondary-text-color);
+      font-weight: 400;
+    }
+
+    /* TODO (johntlee): re-implement with paddings instead; */
+    /* These are used for row items such as radio buttons, check boxes, list
+     * items etc. */
+    --cr-section-min-height: 40px;
+    --cr-section-two-line-min-height: 64px;
+    --cr-section-three-line-min-height: 84px;
+
+    --cr-section-padding: 20px;
+    --cr-section-vertical-padding: 12px;
+    --cr-section-indent-width: 40px;
+    --cr-section-indent-padding: calc(
+        var(--cr-section-padding) + var(--cr-section-indent-width));
+
+    /* TODO(crbug.com/973674): Do not use this mixin. Use the class cr-section
+     * from shared_style_css.html instead. */
+    --cr-section: {
+      align-items: center;
+      border-top: 1px solid var(--cr-iron-background-color);
+      display: flex;
+      min-height: var(--cr-section-min-height);
+      padding: 0 var(--cr-section-padding);
+    }
+
+    --cr-section-vertical-margin: 21px;
+
+    --cr-centered-card-max-width: 680px;
+    --cr-centered-card-width-percentage: 0.96;
+    --cr-centered-card-container: {
+      box-sizing: border-box;
+      display: block;
+      height: inherit;
+      margin: 0 auto;
+      max-width: var(--cr-centered-card-max-width);
+      min-width: 550px;
+      position: relative;
+      width: calc(100% * var(--cr-centered-card-width-percentage));
+    }
+
+    --cr-tooltip: {
+      font-size: 92.31%;  /* Effectively 12px if the host default is 13px. */
+      font-weight: 500;
+      max-width: 330px;
+      min-width: 200px;
+      padding: 10px 8px;
+    }
+
+    --cr-hairline: 1px solid rgba(var(--cr-hairline-rgb), .14);
+
+    --cr-separator-height: 1px;
+    --cr-separator-line: var(--cr-separator-height) solid
+        var(--cr-separator-color);
+
+    --cr-toolbar-overlay-animation-duration: 150ms;
+    --cr-toolbar-height: 50px;
+
+    --cr-container-shadow-height: 6px;
+    --cr-container-shadow-margin: calc(-1 * var(--cr-container-shadow-height));
+
+    --cr-container-shadow-max-opacity: 1;
+
+    /** MD Refresh Styles */
+    --cr-card-border-radius: 4px;
+    --cr-disabled-opacity: .38;
+    --cr-form-field-bottom-spacing: 16px;
+    --cr-form-field-label-font-size: .625rem;
+    --cr-form-field-label-height: 1em;
+    --cr-form-field-label-line-height: 1em;
+  }
+
+  html .dark {
+    --cr-list-color: #252525;
+    --cr-toolbar-bg-color: #212121;
+    --cr-toolbar-font-color: #c0c6d4;
+    --google-grey-refresh-700: var(--cr-toolbar-font-color);
+    --cr-toolbar-search-bg-color: rgba(255, 255, 255, 0.15);
+    --cr-toolbar-search-field-prompt-color: var(--cr-toolbar-font-color);
+    --cr-toolbar-button-cancel-color: #6d6d6d;
+    --cr-toolbar-selection-background-color: var(--cr-toolbar-bg-color);
+    --cr-toolbar-border-bottom-color: #303030;
+    --cr-toolbar-box-shadow: 0px 1px 0px 0px rgba(255,255,255,0.05);
+    --cr-sidebar-background-color: var(--cr-list-color);
+    --cr-sidebar-active-background-color: #0059D2;
+    --cr-sidebar-active-hover-background-color: rgba(0, 89, 210, 0.8);
+    --cr-sidebar-active-box-shadow: rgba(0, 42, 175, 0.4);
+    --cr-iron-background-color: #282828;
+    --cr-iron-no-result-font-color: rgba(192, 198, 212, 0.4);
+    --cr-icon-button-fill-color: var(--cr-toolbar-font-color);
+    --cr-primary-text-color: var(--cr-toolbar-font-color);
+
+    --cr-menu-background-focus-color: var(--cr-sidebar-active-background-color);
+    --cr-menu-btn-icon-img: url(chrome://theme/IDR_HISTORY_MORE_DARK);
+    --cr-menu-background-img: url(chrome://theme/MENU_BG_DARK);
+    --cr-menu-background-sheen: rgba(25, 25, 25, 0.8);
+    --cr-menu-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.2);
+
+    --cr-my-dialog-background-color: rgba(25,25,25,0.80);
+    --cr-my-dialog-title-color: white;
+    --cr-my-dialog-close-normal: url(chrome://theme/CANCEL_NORMAL_DARK);
+    --cr-my-dialog-close-hover: url(chrome://theme/CANCEL_HOVER_DARK);
+    --cr-my-dialog-close-press: url(chrome://theme/CANCEL_PRESS_DARK);
+    --cr-my-dialog-save-btn: linear-gradient(180deg, #0056C1, #004C9C);
+    --cr-my-dialog-save-btn-box-shadow: rgba(0, 145, 255, 0.1);
+    --cr-my-dialog-cancel-btn: linear-gradient(180deg, #484848, #414141);
+    --cr-my-dialog-cancel-btn-border-color: rgba(255, 255, 255, 0.03);
+    --cr-my-dialog-line-color: rgba(255, 255, 255, 0.1);
+    --cr-my-dialog-tips-color: rgba(255,255,255,0.70); 
+    
+    --cr-input-show-background-color: rgba(255, 255, 255, 0.15);
+    --cr-input-font-color: var(--cr-toolbar-font-color);
+    --cr-input-placeholder-color: rgba(192, 198, 212, 0.4);
+    --cr-input-readonly-color: #6D7C88;
+    --cr-input-error-background-color: rgba(241,57,50,0.08);
+    --cr-input-error-tips-background-color: #2a2a2a;
+    --cr-input-error-line-color: #4d4d4d;
+    --cr-input-error-border-color: #1d1d1d;
+    --cr-input-search-icon: url(chrome://theme/SEARCH_ICON_DARK);
+
+    --cr-toggle-background-color: #181818;
+    --cr-toggle-checked-background-color: #181818;
+    --cr-toggle-checked-opacity: 1;
+    --cr-toggle-knob-background-color: linear-gradient(180deg,#3a3a3a 25%, #303030 100%);
+    --cr-toggle-knob-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.30);
+
+    --cr-radio-unchecked-boder-color: rgba(77, 82, 93, 0.80);
+    --cr-radio-unchecked-background-color: rgba(8, 15, 21, 0.70);
+    --cr-separator-color: #282828;
+    --cr-separator-line: var(--cr-separator-height) solid var(--cr-separator-color);
+    --cr-arrow-back-icon: url(chrome://resources/images/icon_arrow_back_dark.svg);
+    --cr-tab-cancel-icon: url(chrome://resources/images/button_tab_cancel_dark.svg);
+    --cr-checkbox-icon: url(chrome://resources/images/checkbox_unchecked_dark.svg);
+    --cr-checkbox-checked-icon: url(chrome://resources/images/checkbox_checked_dark.svg);
+    --cr-expand-less-icon: url(chrome://resources/images/icon_expand_less_dark.svg);
+    --cr-expand-more-icon: url(chrome://resources/images/icon_expand_more_dark.svg);
+    --cr-expand-right-icon: url(chrome://resources/images/arrow_dark.svg);
+    --cr-delete-set-icon: url(chrome://resources/images/set_delete_dark.svg);
+    --cr-link-row-sub-label-color: #6d7c88;
+    --cr-link-row-icon-color: #c5cfe0;
+    --cr-section: {
+      align-items: center;
+      border-top: 1px solid var(--cr-iron-background-color);
+      display: flex;
+      min-height: var(--cr-section-min-height);
+      padding: 0 var(--cr-section-padding);
+    };
+    --cr-scrollbar: {
+      background-color: #1e1e1e;
+    };
+    --cr-scrollbar-thumb: {
+      border-radius: 4px;
+      background-color: rgba(255,255,255,0.20);
+    };
+  }
+</style>
+</custom-style>

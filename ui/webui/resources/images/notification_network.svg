@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>notification-network-wireless-full</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="95.6533653%" id="linearGradient-1">
+            <stop stop-color="#25B7FF" offset="0%"></stop>
+            <stop stop-color="#0098FF" offset="100%"></stop>
+        </linearGradient>
+        <path d="M16,0 C10.2837507,0 5.00171835,3.04958267 2.14359358,8 C-0.714531193,12.9504172 -0.714531193,19.0495828 2.14359358,24 C5.00171835,28.9504173 10.2837507,32 16,32 C24.8365562,32 32,24.836556 32,16 C32,7.163444 24.8365562,0 16,0 L16,0 Z" id="path-2"></path>
+        <filter x="-6.2%" y="-3.1%" width="112.5%" height="112.5%" filterUnits="objectBoundingBox" id="filter-3">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="0.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.2 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="主界面-0819" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="设置对话窗样式" transform="translate(-502.000000, -101.000000)">
+            <g id="对话框-19" transform="translate(492.000000, 91.000000)">
+                <g id="编组" transform="translate(10.000000, 10.000000)">
+                    <g id="形状">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-2"></use>
+                        <use fill="url(#linearGradient-1)" fill-rule="evenodd" xlink:href="#path-2"></use>
+                    </g>
+                    <polyline id="路径-3" stroke="#FFFFFF" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" points="16 6.70967742 16.0000001 16 24.8417339 16"></polyline>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
