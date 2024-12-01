@@ -1,0 +1,96 @@
+# Copyright 2014 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import("//build/buildflag_header.gni")
+import("//build/config/features.gni")
+import("//build/config/ui.gni")
+import("//build/config/compiler/compiler.gni")
+import("//build/config/jumbo.gni")
+
+#import("//build/config/chrome_build.gni")
+#import("//ppapi/buildflags/buildflags.gni")
+#import("//third_party/blink/public/public_features.gni")
+
+if (is_component_build) {
+  link_target_type = "source_set"
+} else {
+  link_target_type = "static_library"
+}
+target(link_target_type, "renderer_host_npapi") {
+  # Targets external to content should always link to the public API.
+  # Internal targets can link to this but only if they're child processes
+  # (i.e. not content/browser or content/common) and only if they're inside the
+  # content component (i.e. not content/test or content/shell).
+  visibility = [
+    ":*",
+  ]
+  if (is_linux) {
+    # See comment in content/app/BUILD.gn above content_app_deps.
+    visibility += [ "//content/browser:browser" ]
+  }
+
+  sources = [
+  ]
+
+  if (use_uniontech_npapi) {
+    sources += [
+      "gtk_plugin_container_manager.cc",
+      "gtk_plugin_container_manager.h",
+    ]
+  }
+
+  public_configs = [
+    # ":config",
+    "//build/config/compiler:default_include_dirs",
+  ]
+
+  configs += [
+    "//build/config:precompiled_headers",
+#    "//content:content_implementation",
+  ]
+
+
+  if (!is_component_build) {
+    # split_count = 1
+  }
+
+  public_deps = [
+    "//third_party/webrtc_overrides:webrtc_component",
+  ]
+
+  deps = [
+    "//third_party/boringssl",
+    "//skia",
+  ]
+
+  if (use_uniontech_npapi && is_desktop_linux) {
+    configs += [ "//build/config/linux/gtk:gtk_internal_config" ]
+  }
+
+  # if (use_x11) {
+    configs += [ "//build/config/linux:x11" ]
+    deps += [ 
+      "//ui/gfx/x",
+      "//ui/events/blink",
+      "//ui/gfx",
+      "//ui/gfx/geometry",
+      "//ui/gfx/ipc",
+      "//ui/gfx/ipc/color",
+      "//ui/gfx/ipc/geometry",
+      "//ui/gfx/ipc/skia",
+      "//ui/gl",
+      "//ui/gl/init",
+   ]
+  # }
+}
+
+# See comment at the top of //content/BUILD.gn for how this works.
+group("for_content_tests") {
+  visibility = [ "//content/test/*" ]
+  if (!is_component_build) {
+    public_deps = [
+      ":renderer_host_npapi",
+    ]
+  }
+}
