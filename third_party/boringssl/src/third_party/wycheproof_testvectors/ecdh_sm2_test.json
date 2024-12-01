@@ -1,0 +1,42 @@
+{
+  "algorithm" : "ECDH",
+  "generatorVersion" : "0.8r12",
+  "numberOfTests" : 460,
+  "header" : [
+    "Test vectors of type EcdhTest are intended for",
+    "testing an ECDH implementations using X509 encoded",
+    "public keys and integers for private keys.",
+    "Test vectors of this format are useful for testing",
+    "Java providers."
+  ],
+  "notes" : {
+    "AddSubChain" : "The private key has a special value. Implementations using addition subtraction chains for the point multiplication may get the point at infinity as an intermediate result. See CVE_2017_10176",
+    "CompressedPoint" : "The point in the public key is compressed. Not every library supports points in compressed format.",
+    "InvalidAsn" : "The public key in this test uses an invalid ASN encoding. Some cases where the ASN parser is not strictly checking the ASN format are benign as long as the ECDH computation still returns the correct shared value.",
+    "InvalidPublic" : "The public key has been modified and is invalid. An implementation should always check whether the public key is valid and on the same curve as the private key. The test vector includes the shared secret computed with the original public key if the public point is on the curve of the private key. Generating a shared secret other than the one with the original key likely indicates that the bug is exploitable.",
+    "ModifiedPrime" : "The modulus of the public key has been modified. The public point of the public key has been chosen so that it is both a point on both the curve of the modified public key and the private key.",
+    "UnnamedCurve" : "The public key does not use a named curve. RFC 3279 allows to encode such curves by explicitly encoding, the parameters of the curve equation, modulus, generator, order and cofactor. However, many crypto libraries only support named curves. Modifying some of the EC parameters and encoding the corresponding public key as an unnamed curve is a potential attack vector.",
+    "UnusedParam" : "A parameter that is typically not used for ECDH has been modified. Sometimes libraries ignore small differences between public and private key. For example, a library might ignore an incorrect cofactor in the public key. We consider ignoring such changes as acceptable as long as these differences do not change the outcome of the ECDH computation, i.e. as long as the computation is done on the curve from the private key.",
+    "WeakPublicKey" : "The vector contains a weak public key. The curve is not a named curve, the public key point has order 3 and has been chosen to be on the same curve as the private key. This test vector is used to check ECC implementations for missing steps in the verification of the public key.",
+    "WrongOrder" : "The order of the public key has been modified. If this order is used in a cryptographic primitive instead of the correct order then private keys may leak. E.g. ECDHC in BC 1.52 suffered from this."
+  },
+  "schema" : "ecdh_test_schema.json",
+  "testGroups" : [
+    {
+      "curve" : "sm2",
+      "encoding" : "asn",
+      "type" : "EcdhTest",
+      "tests" : [
+        {
+          "tcId" : 1,
+          "comment" : "normal case",
+          "public" : "3059301306072a8648ce3d020106082a8648ce3d0301070342000462d5bd3372af75fe85a040715d0f502428e07046868b0bfdfa61d731afe44f26ac333a93a9e70a81cd5a95b5bf8d13990eb741c8c38872b4a07d275a014e30cf",
+          "private" : "0612465c89a023ab17855b0a6bcebfd3febb53aef84138647b5352e02c10c346",
+          "shared" : "53020d908b0219328b658b525f26780e3ae12bcd952bb25a93bc0895e1714285",
+          "result" : "valid",
+          "flags" : []
+        }
+      ]
+    }
+  ]
+}

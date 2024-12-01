@@ -1,0 +1,4 @@
+import("//mojo/public/tools/bindings/mojom.gni")
+mojom("uostheme") {
+  sources = [ "uos_theme.mojom" ]
+} 
